@@ -18,7 +18,7 @@
           </button>
         </div>
         <div class="col-12" id="btn_login">
-          <button type="button" class="google-button" id="google-signin-button">
+          <button type="button" class="google-button" id="google-signin-button" v-on:click="callSomeFunc">
             <span class="google-button__icon">
               <svg viewBox="0 0 366 372" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -82,9 +82,12 @@
       callSomeFunc2() {
         this.$router.push("/MainPage");
       },
-      mounted() {
-        gapi.signin2.render('google-signin-button', {
-          onsuccess: this.onSignIn,
+      mounted: function login_google(){
+        console.log("Kuyyyy")
+        gapi.signin2.render('#google-signin-button', {
+          'scope': 'profile email',
+          'onsuccess': this.onSignInSuccess,
+          'onfailure': this.onSignInError
         })
       },
     }
