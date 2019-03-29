@@ -11,7 +11,6 @@
             <input class="inputfile" id="file" type="file" @change="previewImage" accept="image/*"
               style="background-color:orange;color:white;padding:0.5%;">
 
-
             <label for="file" style="margin:auto;"><img src="../assets/icon_upload.svg" width="6%"> Choose
               a file</label>
 
