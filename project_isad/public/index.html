@@ -2,17 +2,21 @@
 <html lang="en">
 
 <head>
+  <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <title>project_isad</title>
-  <meta name="google-signin-client_id" content="446125241277-rl36d6pqtnsm6h4a6i89c2d108ri5b30.apps.googleusercontent.com">
+
+  <!-- google signin -->
+  <meta name="google-signin-client_id"
+    content="446125241277-rl36d6pqtnsm6h4a6i89c2d108ri5b30.apps.googleusercontent.com">
   <meta name="google-signin-hosted_domain" content="kmitl.ac.th">
+
   <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://apis.google.com/js/api.js"></script>
 </head>
 
 <body style="margin:0">
@@ -20,6 +24,30 @@
     <strong>We're sorry but project_isad doesn't work properly without JavaScript enabled. Please enable it to
       continue.</strong>
   </noscript>
+
+  <!-- Signin Google -->
+  <script>
+    function onSuccess(googleUser) {
+      console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+    }
+    function onFailure(error) {
+      console.log(error);
+    }
+    function renderButton() {
+      gapi.signin2.render('Login', {
+        'scope': 'profile email',
+        'width': 240,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': onSuccess,
+        'onfailure': onFailure
+      });
+    }
+  </script>
+
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
   <div id="app"></div>
   <!-- built files will be auto injected -->
 
