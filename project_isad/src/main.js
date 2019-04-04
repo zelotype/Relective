@@ -8,28 +8,29 @@ import store from './store'
 import BootstrapVue from 'bootstrap-vue'
 import firebase from 'firebase'
 import firebaseui from 'firebaseui'
-import {config} from './firebaseConfig'
-firebase.initializeApp(config);
-
-Vue.use(VueRouter)
-
-Vue.use(BootstrapVue)
-
+import {
+  config
+} from './firebaseConfig'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueRouter from 'vue-router';
-
+firebase.initializeApp(config);
+Vue.use(VueRouter)
+Vue.use(BootstrapVue)
+let app = ''
 Vue.config.productionTip = false
 
 new Vue({
-  el:"#app",
+  el: "#app",
   router,
-  create(){
-    firebase.initializeApp(config);
-    firebase.auth().onAuthStateChanged(function(user) {
-      if(user){
-        this.router.push('/success')
-      }else{
+  create() {
+    firebase.auth().onAuthStateChanged((user) => {
+      user = firebase.auth().currentUser
+      store.commit('set_users', user);
+      if (user) {
+        this.store.commit('set_users', user)
+        // this.router.push('/success')
+      } else {
         this.router.push('/auth')
       }
     });
@@ -37,3 +38,12 @@ new Vue({
   store,
   render: h => h(App)
 })
+
+// firebase.auth().onAuthStateChanged(()=>{
+//   if(!app){
+//     app = new Vue({
+//       router,
+//       render: h => h(app)
+//     }).$mount('#app')
+//   }
+// })

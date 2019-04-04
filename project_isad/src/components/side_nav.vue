@@ -2,14 +2,9 @@
     <div class="sidenav">
         <b-container class="bv-example-row">
             <b-row>
-                <b-col cols="12" id="text_style"><img src="https://mpics.mgronline.com/pics/Images/562000000391117.JPEG" style="border-radius:50%;width:50%;border: 5px solid orange;"></b-col>
+                <b-col cols="12" id="text_style" style="text-align:center"><img src="https://mpics.mgronline.com/pics/Images/562000000391117.JPEG" style="border-radius:50%;width:50%;border: 5px solid orange;"></b-col>
                 <b-col cols="12" id="text_style"><h4>Prapawit Patthasirivichot</h4></b-col>
-            </b-row>
-
-            <b-row>
-                <b-col>1 of 3</b-col>
-                <b-col>2 of 3</b-col>
-                <b-col>3 of 3</b-col>
+                <b-col cols="12" id="text_style"><h6>Faculty: Information Technology</h6></b-col>
             </b-row>
         </b-container>
     </div>
@@ -45,7 +40,7 @@
         }
     } */
     #text_style{
-        text-align: center;
+        text-align: left;
         margin-top: 5px;
     }
 </style>

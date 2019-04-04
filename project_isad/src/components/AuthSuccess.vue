@@ -9,6 +9,7 @@
 <script>
     import firebase from 'firebase'
     import bg from './background_1stPage'
+    import {mapGetters} from 'vuex'
 
     export default {
         components: {
@@ -26,7 +27,8 @@
             }
         },
         created(user) {
-            console.log(firebase.auth().currentUser)
+            console.log(mapGetters(['user']))
+            // console.log(firebase.auth().currentUser)
             if (this.user) {
                 this.name = this.user.name;
             }

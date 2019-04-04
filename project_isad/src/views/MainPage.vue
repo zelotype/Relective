@@ -3,13 +3,13 @@
   <div class="about">
     <bg_1stPage></bg_1stPage>
     <navbar></navbar>
-    <side_navbar></side_navbar>
     <b-container-fluid>
       <b-row>
-        <b-col sm="9" id="right">
+        <b-col id="right">
           <p v-for="l in 12">
-            <b-card bg-variant="warning" text-variant="white" header="06016217 Database System Concepts" class="text-left" style="background-color:orange !important">
-              <b-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
+            <b-card bg-variant="warning" text-variant="white" header="06016217 Database System Concepts"
+              class="text-left" style="background-color:#e8e8e8 !important;color:#171717">
+              <b-card-text style="color:#171717">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b-card-text>
             </b-card>
           </p>
         </b-col>
