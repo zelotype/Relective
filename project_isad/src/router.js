@@ -24,6 +24,7 @@ const router =  new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      
     },
     {
       path: '/MainPage',
@@ -57,12 +58,12 @@ const router =  new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const currentUser = firebase.auth().currentUser;
-  const requireAuth = to.matched.some(record => record.meta.requireAuth);
-  if(requireAuth && !currentUser) next('login');
-  else if(!requireAuth&&currentUser) next('success');
-  else next();
-})
+// router.beforeEach((to, from, next) => {
+//   const currentUser = firebase.auth().currentUser;
+//   const requireAuth = to.matched.some(record => record.meta.requireAuth);
+//   if(requireAuth && !currentUser) next('login');
+//   else if(!requireAuth&&currentUser) next('success');
+//   else next();
+// })
 
 export default router;

@@ -4,7 +4,7 @@
     <bg_1stPage></bg_1stPage>
     <navbar></navbar>
     <b-container-fluid>
-      <b-row>
+      <b-row style="margin:0">
         <b-col id="right">
           <p v-for="l in 12">
             <b-card bg-variant="warning" text-variant="white" header="06016217 Database System Concepts"
@@ -32,6 +32,11 @@
   }
 </script>
 <style scoped>
+#right {
+      position: absolute;
+      height: 100vh;
+      overflow-y: scroll;
+    }
   @media (min-width: 768px) {
     #right {
       position: absolute;
