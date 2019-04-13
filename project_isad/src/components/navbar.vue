@@ -46,7 +46,7 @@
                 </b-container>
 
             </div>
-            <b-navbar style="background-color:#ff8228">
+            <b-navbar style="background-color:#ff8228;z-index:1">
                 <b-navbar-nav>
                     <b-nav-item href="#">Home</b-nav-item>
 
@@ -177,6 +177,7 @@
         transition: 0.5s;
         display: none;
         opacity: 0.6;
+        z-index: 1;
     }
 
     #overlay2 {
@@ -189,7 +190,8 @@
         background-color: white;
         transition: 0.5s;
         display: none;
-        opacity: 0.8;
+        opacity: 0.95;
+        z-index: 1;
     }
 
     #navbar {

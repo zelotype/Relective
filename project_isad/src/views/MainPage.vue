@@ -20,13 +20,11 @@
 <script>
   import bg_1stPage from "../components/background_1stPage";
   import navbar from '../components/navbar.vue'
-  import side_navbar from '../components/side_nav.vue'
   export default {
     name: "MainPage",
     components: {
       bg_1stPage,
       navbar,
-      side_navbar
     },
 
   }
