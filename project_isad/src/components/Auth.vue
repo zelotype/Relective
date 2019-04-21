@@ -1,7 +1,28 @@
 <template>
-  <div>
-    <bg></bg>
-    <div id="firebaseui-auth-container" style="width:100%"></div>
+  <div id="auth_page">
+    <bg id="bg_test"></bg>
+    <b-container style="text-align:center;width:100wh;height:100vh;padding:0;display:flex;align-items: center;">
+      <b-container>
+        <b-row>
+          <b-col cols="12">
+            <img src="../assets/logo.gif" width="100%" style="margin:auto;max-width:700px">
+          </b-col>
+          <b-col cols="12">
+            <h2 style="font-size:20px">Gathering Review And Details</h2>
+            <h1 style="font-size:20px">about Selective in KMITL</h1>
+          </b-col>
+          <b-col cols="12">
+            <div id="firebaseui-auth-container" style="width:100%"></div>
+          </b-col>
+          <b-col cols="12" style="margin-bottom:15px">
+            <h7>------ Not a Member in KMITL ------</h7>
+          </b-col>
+          <b-col cols="12">
+            <b-button style="width:80%;max-width: 220px;background-color:#FF9000" >SignIn with Guest</b-button>
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-container>
   </div>
 </template>
 <script>
@@ -57,3 +78,13 @@
     }
   };
 </script>
+<style scoped>
+  #auth_page {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+  }
+
+  #bg_test {
+    filter: blur(5px);
+  }
+</style>

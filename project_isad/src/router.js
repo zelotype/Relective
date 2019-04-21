@@ -39,7 +39,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './components/Auth.vue')
     },
     {
-      path: '/subjectReview_page_member',
+      path: '/subjectReview_page_member/:subname',
       name: 'subjectreview_page_member',
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route

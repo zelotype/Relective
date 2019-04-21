@@ -23,15 +23,18 @@
                                 <b-container class="bv-example-row">
                                     <b-row v-for="text in case57" style="margin-bottom:10px">
                                         <b-col cols="12" style="background-color:white;color:#044389">
-                                            <h3>{{text.title}}</h3>
+                                            <h3 style="margin-top:8px">{{text.title}}</h3>
                                         </b-col>
                                         <b-col cols="4" v-for="index in text.list_name">
                                             <b-dropdown split split-variant="outline-light" variant="light"
                                                 :text="index.type_name" class="m-2">
                                                 <b-container style="height:100px;overflow-y:scroll;text-align:left">
                                                     <b-dropdown-item v-for="text in index.subject_list"
-                                                        style="color:#044389;text-align:left;padding-left:0;padding-right:0">{{text.subject_id}} | {{text.subject_name}}
+                                                        style="color:#044389;text-align:left;padding-left:0;padding-right:0"
+                                                        @click="testRout(text.subject_id)">
+                                                        {{text.subject_id}} | {{text.subject_name}}
                                                     </b-dropdown-item>
+
                                                 </b-container>
 
                                             </b-dropdown>
@@ -42,17 +45,21 @@
                             </b-collapse>
                             <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                                 <b-container class="bv-example-row">
-                                    <b-row v-for="text in case59 ">
-                                        <b-col cols="12">
-                                            <h3>{{text.title}}</h3>
+                                    <b-row v-for="text in case57" style="margin-bottom:10px">
+                                        <b-col cols="12" style="background-color:white;color:#044389;">
+                                            <h3 style="margin-top:8px">{{text.title}}</h3>
                                         </b-col>
-                                        <b-col v-for="index in text.list_name"><button id="subject">
+                                        <b-col cols="4" v-for="index in text.list_name">
+                                            <b-dropdown split split-variant="outline-light" variant="light"
+                                                :text="index.type_name" class="m-2">
+                                                <b-container style="height:100px;overflow-y:scroll;text-align:left;">
+                                                    <b-dropdown-item v-for="text in index.subject_list"
+                                                        style="color:#044389;text-align:left;padding-left:0;padding-right:0">
+                                                        {{text.subject_id}} | {{text.subject_name}}
+                                                    </b-dropdown-item>
+                                                </b-container>
 
-                                                <!-- <b-dropdown id="dropdown-left" text="Left align" variant="primary"
-                                                    class="m-2">
-                                                    <b-dropdown-item href="#">Action</b-dropdown-item>
-                                                </b-dropdown> -->
-                                            </button>
+                                            </b-dropdown>
                                         </b-col>
 
                                     </b-row>
@@ -65,7 +72,9 @@
             </div>
             <b-navbar style="background-color:#FF9000;z-index:1">
                 <b-navbar-nav>
-                    <b-nav-item href="#">Home</b-nav-item>
+                    <a class="navbar-brand" href="#">
+                        <img src="http://pngimg.com/uploads/google/google_PNG19644.png" width="50" height="auto" alt="">
+                    </a>
 
                     <!-- Navbar dropdowns -->
                     <b-button v-on:click="showCouse" id="course">หลักสูตร</b-button>
@@ -92,7 +101,7 @@
                     </b-col>
                 </b-row>
 
-                <b-row>
+                <b-row style="color:black">
                     <b-col cols="12">
                         <h5>PRAPAWIT PATTHASIRIVICHOT</h5>
                     </b-col>
@@ -117,8 +126,12 @@
     </div>
 </template>
 <script>
+    import router from 'vue-router'
     export default {
         name: "navbar",
+        components: {
+            router
+        },
         props: {
             msg: String
         },
@@ -136,13 +149,13 @@
                                 subject_id: "90101003"
                             }, {
                                 subject_name: "คณิตศาสตร์กับเทคโนโลยี",
-                                subject_id: "90101002"
+                                subject_id: "90101004"
                             }, {
-                                subject_name: "คณิตศาสตร์ในชีวิตประจำวัน",
-                                subject_id: "90101002"
+                                subject_name: "คณิตศาสตร์เพื่อการตัดสินใจ",
+                                subject_id: "90101005"
                             }, {
-                                subject_name: "คณิตศาสตร์ในชีวิตประจำวัน",
-                                subject_id: "90101002"
+                                subject_name: "คณิตศาสตร์เพื่อพัฒนากระบวนการคิด",
+                                subject_id: "90101006"
                             }, {
                                 subject_name: "คณิตศาสตร์ในชีวิตประจำวัน",
                                 subject_id: "90101002"
@@ -358,7 +371,13 @@
             }
         },
         methods: {
-
+            testRout(name) {
+                console.log(name)
+                this.$router.push({
+                    name: 'subjectreview_page_member',
+                    params: {subname:name}
+                })
+            },
             openNav() {
                 if (screen.width < 450) {
                     document.getElementById("mySidenav").style.width = "100%";
