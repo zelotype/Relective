@@ -20,20 +20,19 @@
             </div>
 
             <div class="col-sm-12">
-                <h2 style="font-size:20px">Gathering Review And Details</h2>
+                <h2 style="font-size:20px">Gathering Review And Details about Selective in KMITL</h2>
             </div>
-
             <div class="col-sm-12">
-                <h1 style="font-size:20px">about Selective in KMITL</h1>
+                <h7>Login With studentID@kmitl.ac.th</h7>
             </div>
-
             <div class="col-sm-12">
                 <div class="login">
-                    <p1 style="font-size:30px">Login</p1>
-                    <br>
-                    <button class="google" @click="login">google+</button>
-                    <p style="font-size:10px">not a member?<a href="#">Login As Guest</a></p>
+                    <button id="btn_google"  @click="login"><img src="{% static 'google2.png' %}" id="img_btn"></button>
+
                 </div>
+            </div>
+            <div class="col-sm-12" style="margin-top: 10px">
+                <button type="button" class="btn btn-dark" id="btn">not a member? Login As Guest</button>
             </div>
         </div>
     </div>
@@ -73,6 +72,7 @@
     // create Vue app
     var app = new Vue({
         // element to mount to
+        delimiters: ["<%", "%>"],
         el: '#app1',
         // initial data
         data: {},
@@ -121,6 +121,7 @@
             }
         }
     })
+    app.con
 </script>
 <style>
     body, html {
@@ -180,6 +181,30 @@
         padding: 0;
         display: flex;
         align-items: center;
+    }
+    #btn_google{
+        background-color: transparent;
+        border: transparent;
+        max-width: 300px;
+        width: 100%;
+    }
+    #img_btn{
+        width: 100%;
+    }
+    #btn{
+        max-width: 275px;
+        width: 100%;
+
+    }
+
+    #btn:hover {
+        box-shadow: 5px 5px 5px black;
+    }
+    #img_btn:hover{
+        content: url("{% static 'google1.png' %}");
+    }
+    #img_btn:active{
+        content: url("{% static 'google3.png' %}");
     }
 
 </style>
