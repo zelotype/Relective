@@ -40,16 +40,24 @@ def mainpage_admin(request):
 
 # student
 def mainpage_student(request):
-    return render(request,'student/mainpage.html')
-
-
-
-def subject_detail_student(request):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     context = {
-        'subject_type':subject_type,
-        'subject_name':subject_name,
+        'subject_type': subject_type,
+        'subject_name': subject_name,
+    }
+    return render(request,'student/mainpage.html',context=context)
+
+
+
+def subject_detail_student(request,subject_id):
+    subject_type = navbar_subject()
+    subject_name = nav_subjet_all()
+    subject_purpose = subject_name.get(pk=subject_id)
+    context = {
+        'subject_purpose':subject_purpose,
+        'subject_type': subject_type,
+        'subject_name': subject_name,
     }
     return render(request,'student/subject_detail.html',context=context)
 
