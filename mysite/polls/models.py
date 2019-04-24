@@ -31,9 +31,8 @@ class Courese_GenEd(models.Model):
 
 class Course_Major(models.Model):
     name = models.CharField(max_length=255, null=False)
-    year = models.ForeignKey(Student_Year,on_delete=models.PROTECT)
     faculty = models.ForeignKey(Faculty,on_delete=models.PROTECT)
-    course_gened = models.ForeignKey(Courese_GenEd,on_delete=models.PROTECT)
+    course_year = models.ForeignKey(Course_Year,on_delete=models.PROTECT)
 
 
 class GenEd_Subject(models.Model):
@@ -41,6 +40,9 @@ class GenEd_Subject(models.Model):
     name_eng = models.CharField(max_length=255, null=False, default="")
     categories = models.ForeignKey(Courese_GenEd,on_delete=models.PROTECT)
     description = models.TextField()
+    prerequisite = models.IntegerField(default=1)
+    credit = models.IntegerField(default=1)
+
 
 class User(models.Model):
     name = models.CharField(max_length=255, null=False)
@@ -55,6 +57,8 @@ class User(models.Model):
     year = models.ForeignKey(Student_Year,on_delete=models.PROTECT)
     email = models.EmailField()
     major = models.ForeignKey(Course_Major,null=False,on_delete=models.PROTECT)
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
+    verify = models.BooleanField(default=False)
 
 
 class Review(models.Model):

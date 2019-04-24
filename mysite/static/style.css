@@ -187,6 +187,9 @@
         background-color: #d95748;
         z-index: 20000;
     }
+    #img_btn:active{
+        border: transparent;
+    }
 
     @media screen and (max-width: 991px) {
         #rowcon {

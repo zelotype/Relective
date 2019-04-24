@@ -8,40 +8,41 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
 </head>
-<body>
+<body นืส>
 
 </div>
 <div id="app1">
-{#    <div id="modal">#}
-    <div class="bg-image-black"></div>
-    <div class="bg-image"></div>
+    <div id="modal"></div>
+        <div class="bg-image-black"></div>
+        <div class="bg-image"></div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <img src="{% static "logo.gif" %}" class="giflogo">
-            </div>
-
-            <div class="col-sm-12">
-                <h2 style="font-size:25px">Gathering Review And Details about Selective in KMITL</h2>
-            </div>
-            <div class="col-sm-12">
-                <h7>Login With studentID@kmitl.ac.th</h7>
-            </div>
-            <div class="col-sm-12">
-                <div class="login">
-                    <button id="btn_google" @click="login"><img src="{% static 'google2.png' %}" id="img_btn"></button>
-
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <img src="{% static 'logo.gif' %}" class="giflogo">
                 </div>
-            </div>
-            <div class="col-sm-12" style="margin-top: 10px">
-                <button type="button" class="btn btn-dark" id="btn">not a member? Login As Guest</button>
+
+                <div class="col-sm-12">
+                    <h2 style="font-size:25px">Gathering Review And Details about Selective in KMITL</h2>
+                </div>
+                <div class="col-sm-12">
+                    <h7>Login With studentID@kmitl.ac.th</h7>
+                </div>
+                <div class="col-sm-12">
+                    <div class="login">
+                        <button id="btn_google" @click="login"><img src="{% static 'google2.png' %}" id="img_btn">
+                        </button>
+
+                    </div>
+                </div>
+                <div class="col-sm-12" style="margin-top: 10px">
+                    <button type="button" class="btn btn-dark" id="btn">not a member? Login As Guest</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -99,9 +100,25 @@
                     var user = result;
 
                     if (user.additionalUserInfo.profile.email.includes("@kmitl.ac.th")) {
+                        var url = "{% url 'index' %}"
+                        var form = "<form action='" + url + "'method='POST'>";
+                        form += '{% csrf_token %}'
+                        form += "<input type='hidden' name='user_name' value='" + user.additionalUserInfo.profile.name + "'/>"
+                        form += "<input type='hidden' name='email' value='" + user.additionalUserInfo.profile.email + "'/>"
+
+                        roles = user.additionalUserInfo.profile.email.slice(0, 8)
+                        if (isNaN(roles) == false) {
+                            form += "<input type='hidden' name='faculty' value='" + user.additionalUserInfo.profile.email.slice(2, 4) + "'/>"
+                            form += "<input type='hidden' name='role' value='student'/>"
+                        } else {
+                            form += "<input type='hidden' name='role' value='teacher'/>"
+                        }
+                        form += "</form>"
+                        var form_element = $(form);
+                        $('body').append(form_element);
+                        form_element.submit();
+                        console.log()
                         console.log(user.additionalUserInfo)
-                        localStorage.setItem("name", (user.additionalUserInfo.profile.name).toString());
-                        console.log(user.additionalUserInfo.profile.email)
                     } else {
                         logout()
                         localStorage.removeItem("name")
@@ -121,13 +138,6 @@
                 });
 
             },
-            logout() {
-                firebase.auth().signOut().then(function () {
-                    console.log("Logout")
-                }).catch(function (error) {
-                    console.log("Error")
-                });
-            }
         }
     })
     app.con
@@ -151,7 +161,7 @@
     }
 
     .bg-image {
-        background-image: url("{% static "banner.jpg" %}");
+        background-image: url("{% static " banner.jpg " %}");
         filter: blur(5px);
         height: 100%;
         width: 100%;
@@ -212,6 +222,11 @@
 
     #img_btn {
         width: 100%;
+    }
+
+    #img_btn:active {
+        border: transparent;
+
     }
 
     #btn {
