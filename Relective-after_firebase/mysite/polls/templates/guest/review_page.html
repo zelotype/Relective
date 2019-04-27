@@ -18,10 +18,8 @@
             <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
         </div>
     </div>
-
-    <div class="bg-image"
-         style="background-image: url('https://cdn-images-1.medium.com/max/2600/1*a6msbtG0kIXvCFkpQAoKDg.jpeg')"></div>
     <div class="bg-image-black"></div>
+    <div class="bg-image"></div>
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-4" id="navbg">
@@ -108,6 +106,7 @@
                     aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <a href="{% url 'mainpage_guest' %}"><div  style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div></a>
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -146,13 +145,13 @@
                     </div>
                     <div class="card-footer text-muted" style="position: relative;">
                         Pitchayapol Petchboonchuay
-{#                        <div class="btn-group dropright"#}
-{#                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
-{#                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"#}
-{#                                    aria-haspopup="true" aria-expanded="false" id="tocomment">#}
-{#                                ดูความคิดเห็นเพิ่มเติม#}
-{#                            </button>#}
-{#                        </div>#}
+                        {#                        <div class="btn-group dropright"#}
+                        {#                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
+                        {#                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"#}
+                        {#                                    aria-haspopup="true" aria-expanded="false" id="tocomment">#}
+                        {#                                ดูความคิดเห็นเพิ่มเติม#}
+                        {#                            </button>#}
+                        {#                        </div>#}
                     </div>
                 </div>
             </div>

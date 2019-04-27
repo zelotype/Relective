@@ -79,18 +79,14 @@ def index(request):
             redirect('mainpage_student')
 
     return render(request, 'index.html')
-
-
-def detail(request):
-    return HttpResponse("Detail")
-
-
 def my_logout(request):
     logout_then_login(request,"index")
 
 
+
+
 # admin
-@login_required
+# @login_required
 def mainpage_admin(request):
     return render()
 
@@ -102,14 +98,59 @@ def mainpage_student(request):
     for i in get_user():
         if(request.user.id==i.user.id):
             ans = i
+    subject_type = navbar_subject()
+    subject_name = nav_subjet_all()
+    list1 = []
+    list2 = []
+    list3 = []
+    list4 = []
+    list5 = []
+    list6 = []
+    list7 = []
+    list8 = []
+    list9 = []
+    list10 = []
+    rou = 1
+    for i in subject_name:
+        if (rou < 18):
+            list1.append(i)
+        elif (rou < 36):
+            list2.append(i)
+        elif (rou < 54):
+            list3.append(i)
+        elif (rou < 72):
+            list4.append(i)
+        elif (rou < 90):
+            list5.append(i)
+        elif (rou < 108):
+            list6.append(i)
+        elif (rou < 126):
+            list7.append(i)
+        elif (rou < 144):
+            list8.append(i)
+        elif (rou < 162):
+            list9.append(i)
+        elif (rou < 180):
+            list10.append(i)
+        rou += 1
     context = {
-        'subject_type': navbar_subject(),
-        'subject_name': nav_subjet_all(),
-        'member_info':ans,
+        'subject_type': subject_type,
+        'subject_name': subject_name,
+        'sec1': list1,
+        'sec2': list2,
+        'sec3': list3,
+        'sec4': list4,
+        'sec5': list5,
+        'sec6': list6,
+        'sec7': list7,
+        'sec8': list8,
+        'sec9': list9,
+        'sec10': list10,
+        'member_info': ans
     }
     return render(request, 'student/mainpage.html', context=context)
 
-@login_required
+# @login_required
 def subject_detail_student(request, subject_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -121,9 +162,20 @@ def subject_detail_student(request, subject_id):
     }
     return render(request, 'student/subject_detail.html', context=context)
 
+def review_detail_student(request, subject_id):
+    subject_type = navbar_subject()
+    subject_name = nav_subjet_all()
+    subject_purpose = subject_name.get(pk=subject_id)
+    context = {
+        'subject_purpose': subject_purpose,
+        'subject_type': subject_type,
+        'subject_name': subject_name,
+    }
+    return render(request, 'student/review_page.html', context=context)
+
 
 # teacher
-@login_required
+# @login_required
 def mainpage_teacher(request):
     return render()
 
@@ -132,9 +184,52 @@ def mainpage_teacher(request):
 def mainpage_guest(request):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
+    list1 = []
+    list2 = []
+    list3 = []
+    list4 = []
+    list5 = []
+    list6 = []
+    list7 = []
+    list8 = []
+    list9 = []
+    list10 = []
+    rou = 1
+    for i in subject_name:
+        if(rou<18):
+            list1.append(i)
+        elif(rou<36):
+            list2.append(i)
+        elif (rou < 54):
+            list3.append(i)
+        elif (rou < 72):
+            list4.append(i)
+        elif (rou < 90):
+            list5.append(i)
+        elif (rou < 108):
+            list6.append(i)
+        elif (rou < 126):
+            list7.append(i)
+        elif (rou < 144):
+            list8.append(i)
+        elif (rou < 162):
+            list9.append(i)
+        elif (rou < 180):
+            list10.append(i)
+        rou += 1
     context = {
         'subject_type': subject_type,
         'subject_name': subject_name,
+        'sec1': list1,
+        'sec2': list2,
+        'sec3': list3,
+        'sec4': list4,
+        'sec5': list5,
+        'sec6': list6,
+        'sec7': list7,
+        'sec8': list8,
+        'sec9': list9,
+        'sec10': list10,
     }
     return render(request, 'guest/mainpage.html', context=context)
 
@@ -146,6 +241,7 @@ def subject_detail_guest(request, subject_id):
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
+
     }
     return render(request, 'guest/subject_detail.html', context=context)
 

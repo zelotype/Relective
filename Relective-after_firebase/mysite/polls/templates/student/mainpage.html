@@ -100,6 +100,9 @@
                     aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <a href="{% url 'mainpage_student' %}">
+                <div style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div>
+            </a>
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -125,7 +128,8 @@
             <div class="col-lg-2 sm-12" style="padding: 0">
                 <div class="card" id="cardcontainerprofile">
                     <img class="card-img-top"
-                         src="{{ member_info.img_url }}"
+{#                         src="{{ member_info.img_url }}"#}
+                            src="https://png.pngtree.com/svg/20170518/274aed119e.svg"
                          alt="Card image cap"
                          id="userimg">
                     <div class="card-body" id="cardprofile">
@@ -143,7 +147,8 @@
 
                                 {% for i in subject_name %}
 
-                                    <button class="dropdown-item" type="button"><a id="findsubject" href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
+                                    <button class="dropdown-item" type="button"><a id="findsubject"
+                                                                                   href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
                                         | {{ i.name_th }}</a></button>
 
                                 {% endfor %}
@@ -166,27 +171,9 @@
                 </div>
             </div>
             <div class="col-lg-10 sm-12" style="padding: 0" id="right">
-                <div class="container" style="margin-top: 10px">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="input-group">
-                                <input type="text" class="form-control" aria-label="Text input with dropdown button">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">กรุณาเลือก
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="#">รหัสวิชา</a>
-                                        <a class="dropdown-item" href="#">ชื่อวิชา</a>
-                                        <a class="dropdown-item" href="#">หัวเรื่องรีวิว</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12">
-                            One of three columns
-                        </div>
-                        <div class="col-sm-12">
+                <div class="container-fluid" id="guestright">
+                    <div class="row" id="guestrow">
+                        <div class="col-sm-12" style="padding: 2vw">
                             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
                                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -216,6 +203,479 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="col-sm-12" style="text-align: center;margin-top: 10px">
+                            <div class="input-group" style="width: 80%;margin: auto">
+                                <input type="text" class="form-control" aria-label="Text input with dropdown button"
+                                       v-model='search'>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ค้นหาโดย
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a @click="subid" class="dropdown-item" id="dropdownsearch">รหัสวิชา</a>
+                                        <a @click="subname" class="dropdown-item" id="dropdownsearch">ชื่อวิชา</a>
+                                        <a @click="review" class="dropdown-item" id="dropdownsearch">หัวเรื่องรีวิว</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" id="status" style="display: none">
+                            <div class="card" style="text-align: left;margin: auto;margin-top: 15px;width: 80%" id=""
+                                 v-if="type1">
+                                <h5 class="card-header" style="background-color: #ffba69"><% id %> | <% nameth %> | <%
+                                    nameeng
+                                    %></h5>
+                                <div class="card-body" style="background-color: #ffcf85">
+                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                    {% for k in subject_name %}
+                                        <p v-if=" {{ k.id }} == id" class="card-text">&emsp; {{ k.description }}</p>
+                                        <p v-else-if="'{{ k.name_th }}' == nameth" class="card-text">
+                                            &emsp; {{ k.description }}</p>
+                                        <p v-else-if="'{{ k.name_eng }}' == nameeng" class="card-text">
+                                            &emsp; {{ k.description }}</p>
+                                    {% endfor %}
+                                    <h5 class="card-title">หน่วยกิต : <% credit %></h5>
+                                    <h5 class="card-title">หมวดรายวิชา : <% datatype %></h5>
+                                </div>
+                                <div class="card-footer text-muted"
+                                     style="position: relative;background-color: #ffba69">
+                                    หลักสูตรของปี : 25<% year %>
+                                    <a id="linking" v-bind:href="url">
+                                        <div class="btn-group dropright"
+                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                            <button type="button" class="btn btn-secondary dropdown-toggle"
+                                                    id="tocomment">
+                                                ดูข้อมูลและรีวิว
+                                            </button>
+
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {#                <div class="col-sm-12" style="padding: 2vw;text-align: center" v-if="type">#}
+                            {#                    <div class="card" id="review">#}
+                            {#                        <div class="card-header" style="font-weight: bolder">#}
+                            {#                            หัวข้อรีวิว#}
+                            {#                        </div>#}
+                            {#                        <div class="card-body">#}
+                            {#                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus#}
+                            {#                                asperiores consequatur dignissimos dolores earum est et fuga laborum magni molestiae#}
+                            {#                                molestias obcaecati possimus quisquam, reiciendis soluta totam vel voluptatibus.</p>#}
+                            {#                        </div>#}
+                            {#                        <div class="card-footer text-muted" style="position: relative;">#}
+                            {#                            Pitchayapol Petchboonchuay#}
+                            {#                            <a href="{% url 'review_detail_guest' subject_purpose.id %}">#}
+                            {#                                <div class="btn-group dropright"#}
+                            {#                                     style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
+                            {#                                    <button type="button" class="btn btn-secondary dropdown-toggle" id="tocomment">#}
+                            {#                                        ดูความคิดเห็นเพิ่มเติม#}
+                            {#                                    </button>#}
+                            {##}
+                            {#                                </div>#}
+                            {#                            </a>#}
+                            {#                        </div>#}
+                            {##}
+                            {#                    </div>#}
+                            {#                </div>#}
+                        </div>
+                        <div class="col-sm-12">
+
+                            <div class="container-fluid"
+                                 style="padding: 0;margin-top: 10px;padding-left: 5vw;padding-right: 5vw">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist" style="">
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="list1-tab" data-toggle="tab" href="#list1"
+                                           role="tab"
+                                           aria-controls="list1" aria-selected="true">1</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list2-tab" data-toggle="tab" href="#list2" role="tab"
+                                           aria-controls="list2" aria-selected="false">2</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list3-tab" data-toggle="tab" href="#list3" role="tab"
+                                           aria-controls="list3" aria-selected="false">3</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list4-tab" data-toggle="tab" href="#list4" role="tab"
+                                           aria-controls="list4" aria-selected="false">4</a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list5-tab" data-toggle="tab" href="#list5" role="tab"
+                                           aria-controls="list5" aria-selected="false">5</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list6-tab" data-toggle="tab" href="#list6" role="tab"
+                                           aria-controls="list6" aria-selected="false">6</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list7-tab" data-toggle="tab" href="#list7" role="tab"
+                                           aria-controls="list7" aria-selected="false">7</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list8-tab" data-toggle="tab" href="#list8" role="tab"
+                                           aria-controls="list8" aria-selected="false">8</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list9-tab" data-toggle="tab" href="#list9" role="tab"
+                                           aria-controls="list9" aria-selected="false">9</a>
+                                    </li>
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="list10-tab" data-toggle="tab" href="#list10" role="tab"
+                                           aria-controls="list10" aria-selected="false">10</a>
+                                    </li>
+
+
+                                </ul>
+                                <div class="tab-content" id="myTabContent">
+
+                                    <div class="tab-pane fade show active" id="list1" role="tabpanel"
+                                         aria-labelledby="list1-tab">
+                                        {% for j in sec1 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="tab-pane fade" id="list2" role="tabpanel" aria-labelledby="list2-tab">
+                                        {% for j in sec2 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list3" role="tabpanel" aria-labelledby="list3-tab">
+                                        {% for j in sec3 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list4" role="tabpanel" aria-labelledby="list4-tab">
+                                        {% for j in sec4 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list5" role="tabpanel" aria-labelledby="list5-tab">
+                                        {% for j in sec5 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list6" role="tabpanel" aria-labelledby="list6-tab">
+                                        {% for j in sec6 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list7" role="tabpanel" aria-labelledby="list7-tab">
+                                        {% for j in sec7 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list8" role="tabpanel" aria-labelledby="list8-tab">
+                                        {% for j in sec8 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list9" role="tabpanel" aria-labelledby="list9-tab">
+                                        {% for j in sec9 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="tab-pane fade" id="list10" role="tabpanel" aria-labelledby="list10-tab">
+                                        {% for j in sec10 %}
+                                            <div class="card"
+                                                 style="text-align: left;margin: auto;margin-top: 15px;width: 80%;color: black"
+                                            >
+                                                <h5 class="card-header">{{ j.id }} | {{ j.name_th }}
+                                                    | {{ j.name_eng }}</h5>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">คำอธิบายรายวิชา :</h5>
+                                                    <p class="card-text">&emsp;{{ j.description }}</p>
+                                                    <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>
+                                                    <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>
+                                                </div>
+                                                <div class="card-footer text-muted" style="position: relative;">
+                                                    หลักสูตรของปี : 25{{ j.categories.year_id }}
+                                                    <a href="{% url 'subject_detail_student' j.id %}">
+                                                        <div class="btn-group dropright"
+                                                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                            <button type="button"
+                                                                    class="btn btn-secondary dropdown-toggle"
+                                                                    id="tocomment">
+                                                                ดูข้อมูลและรีวิว
+                                                            </button>
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            {#                {% for j in subject_name %}#}
+                            {#                                    <div class="card" style="text-align: left;margin: auto;margin-top: 15px;width: 80%" id="">#}
+                            {#                                        <h5 class="card-header">{{ j.id }} | {{ j.name_th }} | {{ j.name_eng }}</h5>#}
+                            {#                                        <div class="card-body">#}
+                            {#                                            <h5 class="card-title">คำอธิบายรายวิชา :</h5>#}
+                            {#                                            <p class="card-text">&emsp;{{ j.description }}</p>#}
+                            {#                                            <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>#}
+                            {#                                            <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>#}
+                            {#                                        </div>#}
+                            {#                                        <div class="card-footer text-muted" style="position: relative;">#}
+                            {#                                            หลักสูตรของปี : 25{{ j.categories.year_id }}#}
+                            {#                                            <a href="{% url 'subject_detail_guest' j.id %}">#}
+                            {#                                                <div class="btn-group dropright"#}
+                            {#                                                     style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
+                            {#                                                    <button type="button" class="btn btn-secondary dropdown-toggle" id="tocomment">#}
+                            {#                                                        ดูข้อมูลและรีวิว#}
+                            {#                                                    </button>#}
+                            {##}
+                            {#                                                </div>#}
+                            {#                                            </a>#}
+                            {#                                        </div>#}
+                            {#                                    </div>#}
+                            {#                {% endfor %}#}
+                        </div>
                     </div>
                 </div>
 
@@ -242,15 +702,91 @@
     var app = new Vue({
         el: '#app',
         data: {
-            message: 'Hello Vue!'
+            message: 'Hello Vue!',
+            count: 1,
+            search: "",
+            status: false,
+            type1: true,
+            type2: true,
+            id: 0,
+            nameth: "",
+            nameeng: "",
+            datatype: "",
+            credit: 0,
+            year: "",
+            url: "",
         }, method: {
+            subid() {
+                chk = false
+                this.type1 = false;
+                true.type2 = false;
+                {% for i in subject_name %}
+                    cases = {{ i.id }};
+                    if (cases == this.search) {
+                        this.status = true;
+                        this.type1 = true;
+                        this.id = cases;
+                        this.nameth = "{{ i.name_th }}";
+                        this.nameeng = "{{ i.name_eng }}";
+                        this.datatype = "{{ i.categories.name }}";
+                        this.credit = "{{ i.credit }}";
+                        this.year = "{{ i.categories.year_id }}";
+                        showing();
+                        this.url = "{% url 'subject_detail_student' i.id %}";
+                        chk = true;
+                        alert("ค้นหาสำเร็จ");
+
+                    }
+                {% endfor %}
+                if (chk == false) {
+                    alert("ค้นหาไม่สำเร็จ กรุณากรอกรายละเอียดให้ตรบถ้วน")
+                }
+                this.search = "";
+            },
+            subname() {
+                this.type1 = false;
+                true.type2 = false;
+                chk = false
+                {%  for i in subject_name %}
+                    case_th = "{{ i.name_th }}";
+                    case_en = "{{ i.name_eng }}";
+                    if (case_th == this.search) {
+                        this.status = true;
+                        this.type1 = true;
+                        this.id = "{{ i.id }}";
+                        this.nameth = "{{ i.name_th }}";
+                        this.nameeng = "{{ i.name_eng }}";
+                        this.datatype = "{{ i.categories.name }}";
+                        this.credit = "{{ i.credit }}";
+                        this.year = "{{ i.categories.year_id }}";
+                        showing();
+                        this.url = "{% url 'subject_detail_student' i.id %}";
+                        alert("ค้นหาสำเร็จ");
+                        chk = true
+                    }
+                {% endfor %}
+                this.search = "";
+                if (chk == false) {
+                    alert("ค้นหาไม่สำเร็จ กรุณากรอกรายละเอียดให้ตรบถ้วน")
+                }
+            },
+            review() {
+                this.type1 = false;
+                true.type2 = false;
+
+                this.search = "";
+            },
             logout() {
                 location.href = "{% url 'logout' %}"
             }
         },
         delimiters: ["<%", "%>"],
 
-    })
+    });
+
+    function showing() {
+        document.getElementById('status').style.display = "block";
+    }
 
     function logOut() {
         location.href = "{% url 'logout' %}"

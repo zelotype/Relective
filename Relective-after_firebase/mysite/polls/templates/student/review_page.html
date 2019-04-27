@@ -6,12 +6,18 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
-<body>
+<body onload="loading()">
 <div id="app">
+    <div id="modal" style="z-index: 10000000000000000">
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
+        </div>
+    </div>
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
     <div class="pos-f-t">
@@ -110,7 +116,9 @@
                 <div class="dropdown-menu dropdown-menu-right">
                     <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
                     <div class="dropdown-divider"></div>
-                    <button class="dropdown-item" type="button">ลงชื่อออก</button>
+                    <a href="{% url 'index' %}">
+                        <button class="dropdown-item" type="button">ลงชื่อออก</button>
+                    </a>
                 </div>
             </div>
         </nav>
@@ -169,20 +177,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-10 sm-12" style="padding: 0">
+            <div class="col-lg-10 sm-12">
                 <div class="container-fluid" id="guestright">
                     <div class="row" id="guestrow">
                         <div class="col-sm-12" style="padding: 2vw">
                             <div class="card" style="text-align: left;">
                                 <h5 style="background: linear-gradient(90deg,brown,#FF9000);font-weight: bolder;color: white"
-                                    class="card-header">{{ subject_purpose.id }} | {{ subject_purpose.name_th }}
-                                    | {{ subject_purpose.name_eng }}</h5>
+                                    class="card-header">หัวข้อรีวิว</h5>
                                 <div class="card-body">
-                                    <h5 class="card-title" style="font-weight: bold">คำอธิบายรายวิชา</h5>
+                                    <h5 class="card-title" style="font-weight: bold">รายละเอียด</h5>
                                     <hr>
-                                    <p class="card-text">&emsp;{{ subject_purpose.description }}</p>
-                                    <h5 class="card-title"><b>หน่วยกิต :</b> {{ subject_purpose.credit }} หน่วยกิต</h5>
-                                    <h5 class="card-title"><b>หมวดรายวิชา :</b> {{ subject_purpose.categories.name }}
+                                    ซองเบย์หว่ะ
                                     </h5>
                                     {% for rep in subject_name %}
                                         {% if rep.id == subject_purpose.prerequisite %}
@@ -192,13 +197,23 @@
                                         {% endif %}
                                     {% endfor %}
                                 </div>
+                                <div class="card-footer text-muted" style="position: relative;">
+                                    Pitchayapol Petchboonchuay
+                                    {#                        <div class="btn-group dropright"#}
+                                    {#                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
+                                    {#                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"#}
+                                    {#                                    aria-haspopup="true" aria-expanded="false" id="tocomment">#}
+                                    {#                                ดูความคิดเห็นเพิ่มเติม#}
+                                    {#                            </button>#}
+                                    {#                        </div>#}
+                                </div>
                             </div>
                         </div>
                         {% for i in subject_type %}
                             <div class="col-sm-12" style="padding: 2vw;text-align: center">
                                 <div class="card" id="review">
                                     <div class="card-header" style="font-weight: bolder">
-                                        หัวข้อรีวิว
+                                        ชื่อคนคอมเม้น
                                     </div>
                                     <div class="card-body">
                                         <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
@@ -207,19 +222,6 @@
                                             molestiae
                                             molestias obcaecati possimus quisquam, reiciendis soluta totam vel
                                             voluptatibus.</p>
-                                    </div>
-                                    <div class="card-footer text-muted" style="position: relative;">
-                                        Pitchayapol Petchboonchuay
-                                        <a href="{% url 'review_detail_student' subject_purpose.id %}">
-                                            <div class="btn-group dropright"
-                                                 style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
-                                                <button type="button" class="btn btn-secondary dropdown-toggle"
-                                                        id="tocomment">
-                                                    ดูความคิดเห็นเพิ่มเติม
-                                                </button>
-
-                                            </div>
-                                        </a>
                                     </div>
 
                                 </div>
@@ -261,11 +263,12 @@
             </div>
         </div>
     </div>
+    <footer style="position: absolute;width: 100%;bottom: 0;z-index: 10;max-height: 5%;background-color: #FA7921;text-align: center;color: white;padding: 0">
+        <h6 style="margin: auto">© IT KMITL</h6>
+    </footer>
 </div>
-<footer style="position: absolute;width: 100%;bottom: 0;z-index: 10;max-height: 5%;background-color: #FA7921;text-align: center;color: white;padding: 0">
-    <h6 style="margin: auto">© IT KMITL</h6>
-</footer>
 </body>
+<script src="{% static 'action.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -275,14 +278,17 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </html>
 <script>
     var app = new Vue({
         el: '#app',
         data: {
-            message: 'Hello Vue!'
-        },
+            message: 'Hello Vue!',
+            count: 1,
+        }, method: {},
         delimiters: ["<%", "%>"],
+
     })
 
     function logOut() {

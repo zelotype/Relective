@@ -8,7 +8,9 @@
     /*{#background:linear-gradient(0deg,#3578E5,white) !important;#} */
     background:linear-gradient(90deg,#3578E5,#083D77);
     }
-
+    #status{
+        display: none;
+    }
     body {
         height: 100vh;
         overflow: hidden;
@@ -133,9 +135,11 @@
     }
     #guestright{
         overflow-y: scroll;
-        height: 90vh;
+        height: 92vh;
     }
-
+    #dropdownsearch:hover{
+        cursor: pointer;
+    }
     #cardnavheader {
         color: #3578E5;
         background-color: white !important;
