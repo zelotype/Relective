@@ -18,6 +18,27 @@
             <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
         </div>
     </div>
+    <div id="modal1" style="z-index: 10000000">
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            <div class="container">
+                <div class="row" style="margin: auto;width: 50%">
+                    <div class="col-lg-12">
+                        <div class="card" style="margin: auto;color: black;">
+                            <div class="card-header">
+                                E-Mail ไม่ถูกต้อง
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text" style="color: black">กรุณาใช้ E-Mail ของสถาบัน</p>
+                                <a @click="alertModal" class="btn btn-primary" style="color: white">ตกลง</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
 
@@ -99,6 +120,9 @@
         },
         // methods
         methods: {
+            alertModal() {
+                document.getElementById('modal1').style.display = "none";
+            },
             logout() {
                 firebase.auth().signOut().then(function () {
                     alert("Please SignIn By KMITL E-mail")
@@ -108,10 +132,9 @@
             },
             login() {
                 firebase.auth().signInWithPopup(provider).then(function (result) {
-
                     var token = result.credential.accessToken;
                     var user = result;
-
+                    document.getElementById('modal').style.display = "display";
                     if (user.additionalUserInfo.profile.email.includes("@kmitl.ac.th")) {
                         var url = "{% url 'index' %}"
                         var form = "<form action='" + url + "'method='POST'>";
@@ -130,8 +153,9 @@
                         var form_element = $(form);
                         $('body').append(form_element);
                         form_element.submit();
-                        console.log(user.additionalUserInfo)
+
                     } else {
+                        document.getElementById('modal1').style.display = "block";
                         logout()
 
                     }
@@ -156,6 +180,17 @@
     @font-face {
         font-family: myFirstFont;
         src: url("{% static 'SukhumvitSet.ttc' %}");
+    }
+
+    #modal1 {
+        display: none;
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-color: #d95748;
+        z-index: 2000;
     }
 
     body, html {

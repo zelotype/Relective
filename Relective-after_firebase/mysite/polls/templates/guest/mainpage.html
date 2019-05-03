@@ -106,7 +106,9 @@
                     aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="{% url 'mainpage_guest' %}"><div  style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div></a>
+            <a href="{% url 'mainpage_guest' %}">
+                <div style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div>
+            </a>
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -159,24 +161,29 @@
             </div>
             <div class="col-sm-12" style="text-align: center;margin-top: 10px">
                 <div class="input-group" style="width: 80%;margin: auto">
-                    <input type="text" class="form-control" aria-label="Text input with dropdown button"
-                           v-model='search'>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ค้นหาโดย
-                        </button>
-                        <div class="dropdown-menu">
-                            <a @click="subid" class="dropdown-item" id="dropdownsearch">รหัสวิชา</a>
-                            <a @click="subname" class="dropdown-item" id="dropdownsearch">ชื่อวิชา</a>
-                            <a @click="review" class="dropdown-item" id="dropdownsearch">หัวเรื่องรีวิว</a>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <input aria-label="Text input with dropdown button" class="form-control" type="text"
+                                       v-model='search'>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="custom-select custom-select-lg mb-3">
+                                    <option selected v-model="change">Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="col-sm-12" id="status" style="display: none">
                 <div class="card" style="text-align: left;margin: auto;margin-top: 15px;width: 80%" id="" v-if="type1">
-                    <h5 class="card-header" style="background-color: #ffba69"><% id %> | <% nameth %> | <% nameeng
-                        %></h5>
+                    <h5 class="card-header" style="background-color: #ffba69"><% id %> | <% nameth %> | <%
+                        nameeng%></h5>
                     <div class="card-body" style="background-color: #ffcf85">
                         <h5 class="card-title">คำอธิบายรายวิชา :</h5>
                         {% for k in subject_name %}
@@ -201,31 +208,6 @@
                         </a>
                     </div>
                 </div>
-                {#                <div class="col-sm-12" style="padding: 2vw;text-align: center" v-if="type">#}
-                {#                    <div class="card" id="review">#}
-                {#                        <div class="card-header" style="font-weight: bolder">#}
-                {#                            หัวข้อรีวิว#}
-                {#                        </div>#}
-                {#                        <div class="card-body">#}
-                {#                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A accusamus#}
-                {#                                asperiores consequatur dignissimos dolores earum est et fuga laborum magni molestiae#}
-                {#                                molestias obcaecati possimus quisquam, reiciendis soluta totam vel voluptatibus.</p>#}
-                {#                        </div>#}
-                {#                        <div class="card-footer text-muted" style="position: relative;">#}
-                {#                            Pitchayapol Petchboonchuay#}
-                {#                            <a href="{% url 'review_detail_guest' subject_purpose.id %}">#}
-                {#                                <div class="btn-group dropright"#}
-                {#                                     style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
-                {#                                    <button type="button" class="btn btn-secondary dropdown-toggle" id="tocomment">#}
-                {#                                        ดูความคิดเห็นเพิ่มเติม#}
-                {#                                    </button>#}
-                {##}
-                {#                                </div>#}
-                {#                            </a>#}
-                {#                        </div>#}
-                {##}
-                {#                    </div>#}
-                {#                </div>#}
             </div>
             <div class="col-sm-12">
 
@@ -576,31 +558,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                {#                {% for j in subject_name %}#}
-                {#                                    <div class="card" style="text-align: left;margin: auto;margin-top: 15px;width: 80%" id="">#}
-                {#                                        <h5 class="card-header">{{ j.id }} | {{ j.name_th }} | {{ j.name_eng }}</h5>#}
-                {#                                        <div class="card-body">#}
-                {#                                            <h5 class="card-title">คำอธิบายรายวิชา :</h5>#}
-                {#                                            <p class="card-text">&emsp;{{ j.description }}</p>#}
-                {#                                            <h5 class="card-title">หน่วยกิต : {{ j.credit }}</h5>#}
-                {#                                            <h5 class="card-title">หมวดรายวิชา : {{ j.categories.name }}</h5>#}
-                {#                                        </div>#}
-                {#                                        <div class="card-footer text-muted" style="position: relative;">#}
-                {#                                            หลักสูตรของปี : 25{{ j.categories.year_id }}#}
-                {#                                            <a href="{% url 'subject_detail_guest' j.id %}">#}
-                {#                                                <div class="btn-group dropright"#}
-                {#                                                     style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
-                {#                                                    <button type="button" class="btn btn-secondary dropdown-toggle" id="tocomment">#}
-                {#                                                        ดูข้อมูลและรีวิว#}
-                {#                                                    </button>#}
-                {##}
-                {#                                                </div>#}
-                {#                                            </a>#}
-                {#                                        </div>#}
-                {#                                    </div>#}
-                {#                {% endfor %}#}
             </div>
         </div>
     </div>
@@ -638,10 +595,11 @@
             credit: 0,
             year: "",
             url: "",
+            change: 0
         },
         methods: {
             subid() {
-                chk = false
+                chk = false;
                 this.type1 = false;
                 true.type2 = false;
                 {% for i in subject_name %}
@@ -670,7 +628,7 @@
             subname() {
                 this.type1 = false;
                 true.type2 = false;
-                chk = false
+                chk = false;
                 {%  for i in subject_name %}
                     case_th = "{{ i.name_th }}";
                     case_en = "{{ i.name_eng }}";

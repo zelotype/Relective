@@ -128,8 +128,7 @@
             <div class="col-lg-2 sm-12" style="padding: 0">
                 <div class="card" id="cardcontainerprofile">
                     <img class="card-img-top"
-{#                         src="{{ member_info.img_url }}"#}
-                            src="https://png.pngtree.com/svg/20170518/274aed119e.svg"
+                         src="{{ member_info.img_url }}"
                          alt="Card image cap"
                          id="userimg">
                     <div class="card-body" id="cardprofile">
@@ -137,34 +136,36 @@
                         <h6 class="card-title">คณะ: เทคโนโลยีสารสนเทศ</h6>
                         <h6 class="card-title">ชั้นปี: 2</h6>
                         <h6 class="card-title">สาขา: เทคโนโลยีสารสนเทศ</h6>
-                        <div class="btn-group btn-block">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" id="subjectbtn">
-                                หมอกร้าย
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" id="showsubject"
-                                 style="max-height: 200px;overflow-y: scroll">
+                        {% for req in subject_req %}
+                            <div class="btn-group btn-block">
 
-                                {% for i in subject_name %}
+                                {% if req.status == False %}
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" id="subjectbtn">
+                                        {{ req.subject_type.name }}
+                                    </button>
+                                {% endif %}
+                                {% if req.status == True %}
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" id="subjectbtn" disabled>
+                                        {{ req.subject_type.name }}
+                                    </button>
+                                {% endif %}
+                                <div class="dropdown-menu dropdown-menu-right" id="showsubject"
+                                     style="max-height: 200px;overflow-y: scroll">
 
-                                    <button class="dropdown-item" type="button"><a id="findsubject"
-                                                                                   href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
-                                        | {{ i.name_th }}</a></button>
-
-                                {% endfor %}
+                                    {% for i in subject_name %}
+                                        {% if i.categories.id == req.subject_type.id %}
+                                            <button class="dropdown-item" type="button"><a id="findsubject"
+                                                                                           href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
+                                                | {{ i.name_th }}</a></button>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="btn-group btn-block">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" id="subjectbtn" disabled>
-                                มนุษย์ศาสตร์
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item" type="button">Action</button>
-                                <button class="dropdown-item" type="button">Another action</button>
-                                <button class="dropdown-item" type="button">Something else here</button>
-                            </div>
-                        </div>
+                        {% endfor %}
                         {#                    <button type="button" class="btn btn-secondary btn-lg btn-block" disabled id="subjectbtn">การเต้น#}
                         {#                    </button>#}
                     </div>
