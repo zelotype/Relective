@@ -13,6 +13,7 @@ class Faculty(models.Model):
 
     def __str__(self):
         return '%s' % (self.name)
+
     def __unicode__(self):
         return self.name
 
@@ -39,8 +40,10 @@ class Course_Major(models.Model):
     name = models.CharField(max_length=255, null=False)
     faculty = models.ForeignKey(Faculty, on_delete=models.PROTECT)
     course_year = models.ForeignKey(Course_Year, on_delete=models.PROTECT)
+
     def __str__(self):
         return '%s' % (self.name)
+
     def __unicode__(self):
         return self.name
 
@@ -69,30 +72,36 @@ class User(models.Model):
     major = models.ForeignKey(Course_Major, null=False, on_delete=models.PROTECT)
     user_auth = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     verify = models.BooleanField(default=False, null=False)
-    img_url = models.CharField(max_length=20000,null=True)
+    img_url = models.CharField(max_length=20000, null=True)
 
 
 class Review(models.Model):
-    title = models.CharField(max_length=255, null=False)
-    detail = models.TextField(null=False,blank=True)
+    title = models.CharField(max_length=255, null=True)
+    detail = models.TextField(null=True, blank=True)
     subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.CASCADE)
     verify = models.BooleanField(null=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    rate_point = models.FloatField(default=0,null=True)
-    cover = models.ImageField(upload_to='images/',null=True)
-    human_count = models.IntegerField(default=0,null=True)
-    report = models.TextField(null=True,blank=True)
-    annonymous = models.BooleanField(default=False)
+    cover = models.ImageField(upload_to='images/', null=True)
+    report = models.IntegerField(default=0)
+    annonymous = models.BooleanField(default=False, )
+    report_detail = models.TextField(null=True, blank=True)
 
 
 class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     detail = models.TextField(null=False)
+    report = models.IntegerField(default=0)
+
+
+class RateReview(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    point = models.IntegerField(default=0)
 
 
 class Subject_require(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-    subject_type = models.ForeignKey(Courese_GenEd,on_delete=models.PROTECT)
+    subject_type = models.ForeignKey(Courese_GenEd, on_delete=models.PROTECT)
     status = models.BooleanField(default=False, null=False)
-    subject_id = models.ForeignKey(GenEd_Subject,on_delete=models.PROTECT,null=True)
+    subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.PROTECT, null=True)

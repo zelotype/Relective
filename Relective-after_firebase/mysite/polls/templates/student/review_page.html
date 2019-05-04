@@ -189,10 +189,10 @@
                          alt="Card image cap"
                          id="userimg">
                     <div class="card-body" id="cardprofile">
-                        <h5 class="card-title">Prapawit Patthasirivichot</h5>
-                        <h6 class="card-title">คณะ: เทคโนโลยีสารสนเทศ</h6>
-                        <h6 class="card-title">ชั้นปี: 2</h6>
-                        <h6 class="card-title">สาขา: เทคโนโลยีสารสนเทศ</h6>
+                        <h5 class="card-title">{{ member_info.name }}</h5>
+                        <h6 class="card-title">คณะ: {{ member_info.faculty.name }}</h6>
+                        <h6 class="card-title">ชั้นปี: {{ member_info.year_id }}</h6>
+                        <h6 class="card-title">สาขา: {{ member_info.major.name }}</h6>
                         {% for req in subject_req %}
                             <div class="btn-group btn-block">
 
@@ -223,8 +223,6 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        {#                    <button type="button" class="btn btn-secondary btn-lg btn-block" disabled id="subjectbtn">การเต้น#}
-                        {#                    </button>#}
                     </div>
                 </div>
             </div>
@@ -234,7 +232,23 @@
                         <div class="col-sm-12" style="padding: 2vw">
                             <div class="card" style="text-align: left;">
                                 <h5 style="background: linear-gradient(90deg,brown,#FF9000);font-weight: bolder;color: white;position: relative"
-                                    class="card-header">{{ review.title }}
+                                    class="card-header">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-8"><h3 style="margin: auto">{{ review.title }}</h3></div>
+                                            <div class="col-sm-4">
+                                                <form method="post"
+                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}">
+                                                    {% csrf_token %}
+                                                    <input name="plus" hidden value="1">
+                                                    <button type="submit" class="btn btn-light"
+                                                            style="margin:auto;background:linear-gradient(90deg,#3578E5,#FA7921);color: white;width: 100%">
+                                                        รายงานบทวิจารณ์นี้
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </h5>
 
                                 <div class="card-body">
@@ -248,35 +262,61 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-sm-4" style="padding: 0">
-                                                {{ review.user_id.name }} | {% if review.verify == True %}
-                                                <img src="{% static 'verify.svg' %}" style="max-height: 30px">
-                                            {% endif %}
+                                                <h5 style="margin: auto">{{ review.user_id.name }}</h5>
+                                                {% if review.verify == True %}
+                                                    <img src="{% static 'verify.svg' %}" style="max-height: 30px">
+                                                {% endif %}
                                             </div>
-                                            <div class="col-sm-3" style="padding: 0;text-align: left">
+                                            <div class="col-sm-6" style="padding: 0;text-align: left">
                                                 <form method="post"
-                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}">
+                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}" style="margin: auto">
                                                     {% csrf_token %}
-                                                    <select class="custom-select" name="point" style="width: 50%">
-                                                        <option value="0" selected>0</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                    </select>
-                                                    <button type="submit" class="btn btn-primary">ให้คะแนน</button>
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-sm-2" style="padding: 0">
+                                                                <img id="one" @click="heart1">
+
+                                                            </div>
+                                                            <div class="col-sm-2" style="padding: 0">
+                                                                <img id="two" @click="heart2">
+
+                                                            </div>
+                                                            <div class="col-sm-2" style="padding: 0">
+                                                                <img id="three" @click="heart3">
+
+                                                            </div>
+                                                            <div class="col-sm-2" style="padding: 0">
+                                                                <img id="four" @click="heart4">
+
+                                                            </div>
+                                                            <div class="col-sm-2" style="padding: 0">
+                                                                <img id="five" @click="heart5">
+
+                                                            </div>
+                                                            <div class="col-sm-2" style="padding: 0">
+                                                                <button type="submit" class="btn btn-primary"
+                                                                        style="margin: auto">
+                                                                    <small>ให้คะแนน</small>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <input name="point" v-bind:value="rate" hidden>
                                                 </form>
                                             </div>
                                             <div class="col-sm-2" style="padding: 0;text-align: left">
-                                                <div style="margin-top: 5px">{{ point }} คะแนน</div>
+                                                <div style="margin-top: 5px">{{ RateReview }} คะแนน</div>
                                             </div>
-                                            <div class="col-sm-2" style="padding: 0;text-align: right">
+                                            <div class="col-sm-12" style="padding: 0;text-align: center;margin-top: 10px">
+
                                                 <button type="button" class="btn btn-light"
-                                                        style="background-color: #3578E5 !important;color: white"
+                                                        style="background-color: #3578E5 !important;color: white;width: 100%"
                                                         @click="reviews">
                                                     เขียนความคิดเห็น
                                                 </button>
+
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -286,7 +326,27 @@
                             <div class="col-sm-12" style="padding: 2vw;text-align: center">
                                 <div class="card" id="review">
                                     <div class="card-body">
-                                        <h5>{{ i.user_id.name }}</h5>
+
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <h5>{{ i.user_id.name }}</h5>
+
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                                                id="dropdownMenu2" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false"
+                                                                style="background-color: transparent !important;border: transparent;color: #3578E5">
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                            <button class="dropdown-item" type="button">รายงาน</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <hr>
                                         <p class="card-text">{{ i.detail }}</p>
                                     </div>
@@ -333,6 +393,7 @@
     <footer style="position: absolute;width: 100%;bottom: 0;z-index: 10;max-height: 5%;background-color: #FA7921;text-align: center;color: white;padding: 0">
         <h6 style="margin: auto">© IT KMITL</h6>
     </footer>
+
 </div>
 </body>
 <script src="{% static 'action.js' %}"></script>
@@ -353,10 +414,91 @@
         data: {
             message: 'Hello Vue!',
             count: 1,
-            isActive: false
+            isActive: false,
+            rate: 0,
         }, methods: {
             reviews() {
                 this.isActive = !this.isActive;
+            }, heart1() {
+                if (this.rate == 1) {
+                    document.getElementById('one').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('two').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 0
+                } else {
+                    document.getElementById('one').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('two').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 1
+                }
+            }, heart2() {
+                if (this.rate == 2) {
+                    document.getElementById('one').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('two').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 0
+                } else {
+                    document.getElementById('one').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('two').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 2
+                }
+            }, heart3() {
+                if (this.rate == 3) {
+                    document.getElementById('one').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('two').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 0
+                } else {
+                    document.getElementById('one').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('two').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('three').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 3
+                }
+            }, heart4() {
+                if (this.rate == 4) {
+                    document.getElementById('one').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('two').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 0
+                } else {
+                    document.getElementById('one').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('two').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('three').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('four').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 4
+                }
+            }, heart5() {
+                if (this.rate == 5) {
+                    document.getElementById('one').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('two').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('three').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('four').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    document.getElementById('five').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
+                    this.rate = 0
+                } else {
+                    document.getElementById('one').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('two').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('three').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('four').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    document.getElementById('five').style = "content: url('https://image.flaticon.com/icons/svg/118/118669.svg')"
+                    this.rate = 5
+                }
             },
         },
         delimiters: ["<%", "%>"],
@@ -371,4 +513,12 @@
     #id_detail {
         width: 100%;
     }
+
+    #one, #two, #three, #four, #five {
+        margin: auto;
+        width: 50% !important;
+        content: url("https://image.flaticon.com/icons/svg/126/126482.svg");
+        cursor: pointer;
+    }
+
 </style>

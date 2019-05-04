@@ -78,12 +78,22 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
+# 'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'prototype_db2',
+#         'USER': 'relective',
+#         'PASSWORD': 'relectiveadmin',
+#         'HOST': 'relective.cxxpibpmr5b6.us-east-1.rds.amazonaws.com',
+#         'PORT': '3306'
+#     }
+
+
 'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'prototype_db2',
-        'USER': 'relective',
-        'PASSWORD': 'relectiveadmin',
-        'HOST': 'relective.cxxpibpmr5b6.us-east-1.rds.amazonaws.com',
+        'NAME': 'database2',
+        'USER': 'root',
+        'PASSWORD': 'first008',
+        'HOST': '127.0.0.1',
         'PORT': '3306'
     }
 }

@@ -132,10 +132,10 @@
                          alt="Card image cap"
                          id="userimg">
                     <div class="card-body" id="cardprofile">
-                        <h5 class="card-title">Prapawit Patthasirivichot</h5>
-                        <h6 class="card-title">คณะ: เทคโนโลยีสารสนเทศ</h6>
-                        <h6 class="card-title">ชั้นปี: 2</h6>
-                        <h6 class="card-title">สาขา: เทคโนโลยีสารสนเทศ</h6>
+                        <h5 class="card-title">{{ member_info.name }}</h5>
+                        <h6 class="card-title">คณะ: {{ member_info.faculty.name }}</h6>
+                        <h6 class="card-title">ชั้นปี: {{ member_info.year_id }}</h6>
+                        <h6 class="card-title">สาขา: {{ member_info.major.name }}</h6>
                         {% for req in subject_req %}
                             <div class="btn-group btn-block">
 
@@ -222,7 +222,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-sm-12" id="status" style="display: none">
+                        <div class="col-sm-12" id="status" style="display: none;text-align: center">
                             <div class="card" style="text-align: left;margin: auto;margin-top: 15px;width: 80%" id=""
                                  v-if="type1">
                                 <h5 class="card-header" style="background-color: #ffba69"><% id %> | <% nameth %> | <%
@@ -255,13 +255,13 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="card" style="text-align: left;" v-if="type2">
+                            <div class="card" style="text-align: left;width: 80%;margin: auto" v-if="type2">
                                 <h5 style="background: linear-gradient(90deg,brown,#FF9000);font-weight: bolder;color: white;position: relative"
                                     class="card-header"><% review_title %>
                                 </h5>
 
                                 <div class="card-body">
-                                    <h5 class="card-title" style="font-weight: bold">รายละเอียด</h5>
+                                    <h5 class="card-title" style="font-weight: bold"><small>รายละเอียด</small></h5>
                                     <hr>
                                     <% review_desc %>
                                     </h5>
@@ -271,10 +271,7 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-sm-4" style="padding: 0">
-                                                <% review_by %> |
-                                                <img src="{% static 'verify.svg' %}" style="max-height: 30px"
-                                                     v-if="verify">
-
+                                                เขียนโดย : <% review_by %>
                                             </div>
                                         </div>
                                     </div>
@@ -722,16 +719,15 @@
             review_title: "",
             review_desc: "",
             review_by: '',
-            verify: false
         }, methods: {
             searchinput() {
 
                 if (this.searchtype == 1) {
-                    chk = false;
+                    var chk = false;
                     this.type1 = false;
-                    true.type2 = false;
+                    this.type2 = false;
                     {% for i in subject_name %}
-                        cases = {{ i.id }};
+                        var cases = {{ i.id }};
                         if (cases == this.search) {
                             this.status = true;
                             this.type1 = true;
@@ -754,7 +750,7 @@
                     this.search = "";
                 } else if (this.searchtype == 2) {
                     this.type1 = false;
-                    true.type2 = false;
+                    this.type2 = false;
                     chk = false;
                     {%  for i in subject_name %}
                         case_th = "{{ i.name_th }}";
@@ -780,19 +776,20 @@
                     }
                 } else if (this.searchtype == 3) {
                     this.type1 = false;
-                    true.type2 = false;
-                    chk = false;
+                    this.type2 = false;
+                    var chk = false;
                     {% for i in review %}
-                        header = "{{ i.title }}";
+                        var header = "{{ i.title }}";
                         if (header == this.search) {
                             this.review_title = "{{ i.title }}";
                             this.review_desc = '"{{ i.detail }}"';
-                            this.review_by = "{{ i.user_id.name }}";
-                            this.verify = {{ i.verify }};
+                            this.review_by = "{{ i.user_id.role }}";
+
                             chk = true;
                             showing();
                             alert("ค้นหาสำเร็จ");
-                            this.type2 = true
+                            this.type2 = true;
+                            this.status = true;
                         }
                     {% endfor %}
                     this.search = "";

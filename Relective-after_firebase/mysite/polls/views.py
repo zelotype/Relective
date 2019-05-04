@@ -9,7 +9,7 @@ from permission import permission
 
 from polls.forms import ReviewForm, CommentForm
 from polls.models import Courese_GenEd, GenEd_Subject, Faculty, Course_Major, Subject_require, Student_Year, Review, \
-    Comment
+    Comment, RateReview
 from polls.models import User as member
 
 subject_type = Courese_GenEd.objects.all()
@@ -89,7 +89,7 @@ def index(request):
             users.set_password(request.POST.get('email'))
 
             users.save()
-            login(request, user)
+            login(request, users)
         return redirect('set_infor_student')
     return render(request, 'index.html')
 
@@ -242,8 +242,8 @@ def mainpage_student(request):
         'sec10': list10,
         'member_info': ans,
         'user': user_obj,
-        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id']),
-        'review':Review.objects.all()
+        'subject_req': Subject_require.objects.filter(user_id_id=ans.id),
+        'review': Review.objects.all()
     }
     return render(request, 'student/mainpage.html', context=context)
 
@@ -254,41 +254,51 @@ def subject_detail_student(request, subject_id):
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
     ans = ""
-    state_annonymous = False,
+    state_annonymous = False
+    reviewform = ReviewForm
     if request.POST.get('annonymous') == 'on':
-        state_annonymous = True
+        state_annonymous = True;
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
     if request.method == "POST":
-        form = ReviewForm(request.POST, request.FILES)
-        if request.FILES.get('cover') != "":
-            Review.objects.create(
-                title=request.POST.get('title'),
-                detail=request.POST.get('detail'),
-                subject_id_id=request.POST.get('subject_id'),
-                user_id_id=ans.id,
-                cover=request.FILES.get('cover'),
-                annonymous=state_annonymous,
-                verify=False
-            )
+        print(request.POST)
+        if request.POST.get('plus') == '1':
+            ans = Review.objects.get(pk=subject_id)
+            ans.report += 1
+            ans.save()
         else:
-            Review.objects.create(
-                title=request.POST.get('title'),
-                detail=request.POST.get('detail'),
-                subject_id_id=request.POST.get('subject_id'),
-                user_id_id=ans.id,
-                cover=request.FILES.get('cover'),
-                annonymous=state_annonymous,
-            )
+            reviewform = ReviewForm(request.POST, request.FILES)
+            if (reviewform.is_valid()):
+                if request.FILES.get('cover') != "":
+                    Review.objects.create(
+                        title=request.POST.get('title'),
+                        detail=request.POST.get('detail'),
+                        subject_id_id=request.POST.get('subject_id'),
+                        user_id_id=ans.id,
+                        cover=request.FILES.get('cover'),
+                        annonymous=state_annonymous,
+                        verify=False
+                    )
+                else:
+                    Review.objects.create(
+                        title=request.POST.get('title'),
+                        detail=request.POST.get('detail'),
+                        subject_id_id=request.POST.get('subject_id'),
+                        user_id_id=ans.id,
+                        cover=request.FILES.get('cover'),
+                        annonymous=state_annonymous,
+                    )
+    else:
+        reviewform = ReviewForm
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
         'user': user_obj,
-        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id']),
+        'subject_req': Subject_require.objects.filter(user_id_id=ans.id),
         'member_info': ans,
-        'review_form': ReviewForm,
+        'review_form': reviewform,
         'review': Review.objects.all()
     }
     return render(request, 'student/subject_detail.html', context=context)
@@ -299,35 +309,51 @@ def review_detail_student(request, subject_id, review_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
-    point = 0
-    if (Review.objects.get(pk=review_id).rate_point != 0 and Review.objects.get(pk=review_id).human_count != 0):
-        point = Review.objects.get(pk=review_id).rate_point / Review.objects.get(pk=review_id).human_count
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
     if request.method == 'POST':
-        if (request.POST.get('point') != None):
-            case = Review.objects.get(pk=review_id)
-            case.rate_point += int(request.POST.get('point'))
-            case.human_count += 1
-            case.save()
-            point = Review.objects.get(pk=review_id).rate_point / Review.objects.get(pk=review_id).human_count
-        if (request.POST.get('detail') != None):
-            Comment.objects.create(
-                detail=request.POST.get('detail'),
-                review_id=Review.objects.get(pk=review_id).id,
-                user_id_id=ans.id
-            )
+        if request.POST.get('plus') == '1':
+            ans = Review.objects.get(pk=review_id)
+            ans.report += 1
+            ans.save()
+        else:
+            if (request.POST.get('detail') != None):
+                Comment.objects.create(
+                    detail=request.POST.get('detail'),
+                    review_id=Review.objects.get(pk=review_id).id,
+                    user_id_id=ans.id
+                )
+            if (request.POST.get('point')):
+                listchk = RateReview.objects.all()
+                chk = False
+                for i in listchk:
+                    print(i)
+                    if (i.review.id == review_id and i.user.id == ans.id):
+                        i.point = request.POST.get('point')
+                        i.save()
+                        chk = True
+                if (chk == False):
+                    RateReview.objects.create(
+                        point=request.POST.get('point'),
+                        review_id=review_id,
+                        user_id=ans.id
+                    )
+    rate = 0
+    for j in RateReview.objects.all():
+        if (j.review.id == review_id):
+            rate += int(j.point)
+            print(j)
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
-        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id']),
+        'subject_req': Subject_require.objects.filter(user_id_id=ans.id),
         'member_info': ans,
         'review': Review.objects.get(pk=review_id),
-        'point': point,
         'CommentForm': CommentForm,
-        'comment': Comment.objects.filter(review_id=review_id)
+        'comment': Comment.objects.filter(review_id=review_id),
+        'RateReview': rate
     }
     return render(request, 'student/review_page.html', context=context)
 
