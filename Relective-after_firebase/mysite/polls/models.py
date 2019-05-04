@@ -74,17 +74,20 @@ class User(models.Model):
 
 class Review(models.Model):
     title = models.CharField(max_length=255, null=False)
-    detail = models.TextField(null=False)
-    subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.PROTECT)
-    verify = models.BooleanField()
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT, null=False)
-    rate_point = models.FloatField(default=0)
-    human_count = models.IntegerField(default=0)
+    detail = models.TextField(null=False,blank=True)
+    subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.CASCADE)
+    verify = models.BooleanField(null=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    rate_point = models.FloatField(default=0,null=True)
+    cover = models.ImageField(upload_to='images/',null=True)
+    human_count = models.IntegerField(default=0,null=True)
+    report = models.TextField(null=True,blank=True)
+    annonymous = models.BooleanField(default=False)
 
 
 class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     detail = models.TextField(null=False)
 
 

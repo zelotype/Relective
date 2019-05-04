@@ -1,234 +1,272 @@
+@font-face {
+    font-family: myFirstFont;
+    src: url("SukhumvitSet.ttc");
+}
 
-    @font-face {
-        font-family: myFirstFont;
-        src: url("SukhumvitSet.ttc");
-    }
-
-    #navbg {
+#navbg {
     /*{#background:linear-gradient(0deg,#3578E5,white) !important;#} */
-    background:linear-gradient(90deg,#3578E5,#083D77);
-    }
-    #status{
-        display: none;
-    }
-    body {
-        height: 100vh;
-        overflow: hidden;
-        font-family: myFirstFont;
-    }
+    background: linear-gradient(90deg, #3578E5, #083D77);
+}
 
-    .bg-dark {
-        /*background-color: #3578E5 !important;*/
-        background:linear-gradient(90deg,#3578E5,#083D77);
+#status {
+    display: none;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    font-family: myFirstFont;
+}
+
+.bg-dark {
+    /*background-color: #3578E5 !important;*/
+    background: linear-gradient(90deg, #3578E5, #083D77);
     /*{#background-color: white !important;#}*/
-    }
+}
 
-    .bg-image {
-        background-image: url("banner.jpg");
-        filter: blur(2px);
-        height: 100%;
-        width: 100%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        position: absolute;
-        z-index: -2000;
-    }
+.bg-image {
+    background-image: url("banner.jpg");
+    filter: blur(2px);
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+    z-index: -2000;
+}
 
-    #contai {
-        text-align: center;
-        position: absolute;
-        height: 100vh;
-    }
+#contai {
+    text-align: center;
+    position: absolute;
+    height: 100vh;
+}
 
-    .btn-outline-secondary {
-        background-color: #FA7921;
-        color: white;
-    }
+.btn-outline-secondary {
+    background-color: #FA7921;
+    color: white;
+}
 
-    #subjectbtn:hover {
-        background-color: #3578E5;
-        color: white;
-    }
+#subjectbtn:hover {
+    background-color: #3578E5;
+    color: white;
+}
 
-    #right {
-        overflow-y: scroll;
-    }
+#right {
+    overflow-y: scroll;
+}
 
+#rowcon {
+    height: 100%;
+}
+
+#userimg {
+    border-radius: 50%;
+    width: 100%;
+    height: auto;
+    margin: auto;
+    margin-top: 10px;
+    border: 5px solid #FA7921;
+    max-width: 130px;
+}
+
+#coroimg {
+    height: 100%;
+    content: url("https://scontent.fbkk5-5.fna.fbcdn.net/v/t1.0-9/56795696_2290030181058254_6042101464493457408_o.jpg?_nc_cat=100&_nc_eui2=AeGaXwscMbJKKaAaMRBLBxryiI05XluQkuRBAYI8S5xPknX_HpvgNpkNK2RklO2RpeqSZUFzXHgHbccds07XNslzlA6L3KsTtsQhuzPyZsyfgQ&_nc_ht=scontent.fbkk5-5.fna&oh=31bce95856e25abffac4399286bee5cb&oe=5D398497");
+    max-height: 700px;
+    height: 100%;
+    width: 100%;
+}
+
+#coroimg2 {
+    content: url("https://scontent.fbkk5-5.fna.fbcdn.net/v/t1.0-9/53844218_2628551933827953_2114746355002900480_o.jpg?_nc_cat=100&_nc_eui2=AeGZ1fvPqCPCVv8hsCh6u5yrhKaVSq3HmVmktbXgMNi6R6OYpql01urXrQeJZ2ftTsN3A4Xdhc9AoXdsQf0auOyAAFr9f5FtrewivR7smMQ0nA&_nc_ht=scontent.fbkk5-5.fna&oh=9e58a19f1ffaaaaa7791e9effdf88635&oe=5D2FD418");
+    max-height: 700px;
+    height: 100%;
+    width: 100%;
+}
+
+#coroimg3 {
+    content: url("https://scontent.fbkk5-3.fna.fbcdn.net/v/t1.0-9/51023234_2175306862530587_5819048222080892928_o.jpg?_nc_cat=111&_nc_eui2=AeH_S0HkW2-mkzjWMxI0GyuYKForgilJebSfkN2etryakXRFGswV4BkkVrNUEmja4s2pJlkpqaHCqXveYtZ1n7poxMGIM3RkxgfAg8A0Db26Dw&_nc_ht=scontent.fbkk5-3.fna&oh=9fe6920e5315ba3815861cdf51a55ee8&oe=5D41B306");
+    max-height: 700px;
+    height: 100%;
+    width: 100%;
+}
+
+.nav-tabs .nav-link {
+    color: white;
+}
+
+.nav-link.active {
+    color: #3578E5 !important;
+}
+
+.tab-pane {
+    color: white;
+}
+
+#cardprofile {
+    text-align: left;
+}
+
+#cardcontainerprofile {
+    width: 100%;
+    bottom: 0px;
+    height: 100%;
+    text-align: center;
+    background-color: white
+}
+
+#subjectbtn {
+    background-color: #FA7921;
+    border: transparent;
+    font-size: 16px;
+    width: 100%;
+    text-align: right;
+}
+
+#cardNav {
+    background-color: transparent !important;
+    border: transparent !important;
+}
+
+#cardNavbody {
+    background-color: transparent !important;
+
+
+}
+#showsubject{
+    max-height: 200px;
+    max-width: 300px;
+    overflow-y: scroll;
+    overflow-x: scroll;
+
+}
+
+#guestright {
+    overflow-y: scroll;
+    height: 92vh;
+}
+
+#dropdownsearch:hover {
+    cursor: pointer;
+}
+
+#cardnavheader {
+    color: #3578E5;
+    background-color: white !important;
+    /*{#border: 1px solid #3578E5 ;#}*/
+}
+
+#navbarToggleExternalContent {
+    max-height: 80vh;
+
+}
+
+#nav-tabContent {
+    height: 72vh;
+    overflow-y: scroll;
+}
+
+#btngolink {
+    transition: all 1.5s;
+    color: white;
+    background-color: transparent;
+    text-align: left;
+    width: 100%;
+}
+
+#btngolink:hover {
+    color: white;
+    background-color: #FA7921;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: transparent;
+}
+
+.btn-secondary:hover {
+    background-color: white;
+    color: #3578E5;
+}
+
+.show > .btn-secondary.dropdown-toggle {
+    background-color: white;
+    color: #3578E5;
+}
+
+#findsubject, a {
+    color: #3578E5;
+    text-decoration: none;
+}
+
+#findsubject:hover {
+    text-underline: none;
+}
+
+#modal {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #d95748;
+    z-index: 2000;
+}
+
+#modal2 {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #d95748;
+    z-index: 2000;
+}
+
+
+#img_btn:active {
+    border: transparent;
+}
+
+#guestrow {
+    /*margin-top: 10px;*/
+}
+
+.card-header {
+    /*background-color: transparent;*/
+}
+
+#review {
+    margin-top: 10px;
+    text-align: left;
+    width: 70%;
+    margin: auto;
+}
+
+#tocomment {
+    background-color: #FA7921 !important;
+}
+
+#tocomment:hover {
+    background-color: #3578E5 !important;
+    color: white !important;
+}
+
+@media screen and (max-width: 991px) {
     #rowcon {
-        height: 100%;
+        height: 50%;
     }
 
     #userimg {
-        border-radius: 50%;
         width: 100%;
-        height: auto;
-        margin: auto;
-        margin-top: 10px;
-        border: 5px solid #FA7921;
-        max-width: 130px;
-    }
-
-    #coroimg {
-        height: 100%;
-        content: url("https://scontent.fbkk5-5.fna.fbcdn.net/v/t1.0-9/56795696_2290030181058254_6042101464493457408_o.jpg?_nc_cat=100&_nc_eui2=AeGaXwscMbJKKaAaMRBLBxryiI05XluQkuRBAYI8S5xPknX_HpvgNpkNK2RklO2RpeqSZUFzXHgHbccds07XNslzlA6L3KsTtsQhuzPyZsyfgQ&_nc_ht=scontent.fbkk5-5.fna&oh=31bce95856e25abffac4399286bee5cb&oe=5D398497");
-        max-height: 700px;
-        height: 100%;
-        width: 100%;
-    }
-
-    #coroimg2 {
-        content: url("https://scontent.fbkk5-5.fna.fbcdn.net/v/t1.0-9/53844218_2628551933827953_2114746355002900480_o.jpg?_nc_cat=100&_nc_eui2=AeGZ1fvPqCPCVv8hsCh6u5yrhKaVSq3HmVmktbXgMNi6R6OYpql01urXrQeJZ2ftTsN3A4Xdhc9AoXdsQf0auOyAAFr9f5FtrewivR7smMQ0nA&_nc_ht=scontent.fbkk5-5.fna&oh=9e58a19f1ffaaaaa7791e9effdf88635&oe=5D2FD418");
-        max-height: 700px;
-        height: 100%;
-        width: 100%;
-    }
-
-    #coroimg3 {
-        content: url("https://scontent.fbkk5-3.fna.fbcdn.net/v/t1.0-9/51023234_2175306862530587_5819048222080892928_o.jpg?_nc_cat=111&_nc_eui2=AeH_S0HkW2-mkzjWMxI0GyuYKForgilJebSfkN2etryakXRFGswV4BkkVrNUEmja4s2pJlkpqaHCqXveYtZ1n7poxMGIM3RkxgfAg8A0Db26Dw&_nc_ht=scontent.fbkk5-3.fna&oh=9fe6920e5315ba3815861cdf51a55ee8&oe=5D41B306");
-        max-height: 700px;
-        height: 100%;
-        width: 100%;
-    }
-
-    .nav-tabs .nav-link {
-        color: white;
-    }
-
-    .nav-link.active {
-        color: #3578E5 !important;
-    }
-
-    .tab-pane {
-        color: white;
+        max-width: 245px;
     }
 
     #cardprofile {
-        text-align: left;
-    }
-
-    #cardcontainerprofile {
-        width: 100%;
-        bottom: 0px;
-        height: 100%;
         text-align: center;
-        background-color: white
     }
-
-    #subjectbtn {
-        background-color: #FA7921;
-        border: transparent;
-        font-size: 16px;
-        width: 100%;
-        text-align: right;
-    }
-
-    #cardNav {
-        background-color: transparent !important;
-        border: transparent !important;
-    }
-
-    #cardNavbody {
-        background-color: transparent !important;
-
-
-    }
-    #guestright{
-        overflow-y: scroll;
-        height: 92vh;
-    }
-    #dropdownsearch:hover{
-        cursor: pointer;
-    }
-    #cardnavheader {
-        color: #3578E5;
-        background-color: white !important;
-    /*{#border: 1px solid #3578E5 ;#}*/
-    }
-
-    #navbarToggleExternalContent {
-        max-height: 80vh;
-
-    }
-
-    #nav-tabContent {
-        height: 72vh;
-        overflow-y: scroll;
-    }
-
-    #btngolink {
-        transition: all 1.5s;
-        color: white;
-        background-color: transparent;
-        text-align: left;
-        width: 100%;
-    }
-
-    #btngolink:hover {
-        color: white;
-        background-color: #FA7921;
-    }
-    .btn-secondary{
-        background-color: transparent;
-        border: transparent;
-    }
-    .btn-secondary:hover{
-        background-color: white;
-        color: #3578E5;
-    }
-    .show>.btn-secondary.dropdown-toggle{
-        background-color: white;
-        color: #3578E5;
-    }
-    #findsubject,a{
-        color: #3578E5;
-        text-decoration: none;
-    }
-    #findsubject:hover{
-        text-underline: none;
-    }
-    #modal{
-        position: absolute;
-        bottom: 0;
-        top: 0;
-        left: 0;
-        right: 0;
-        background-color: #d95748;
-        z-index: 2000;
-    }
-    #img_btn:active{
-        border: transparent;
-    }
-    #guestrow{
-        /*margin-top: 10px;*/
-    }
-    .card-header{
-        /*background-color: transparent;*/
-    }
-    #review{
-        margin-top: 10px;
-        text-align: left;
-        width: 70%;
-        margin:auto;
-    }
-    #tocomment{
-        background-color: #FA7921 !important;
-    }
-    #tocomment:hover{
-        background-color: #3578E5 !important;
-        color: white !important;
-    }
-    @media screen and (max-width: 991px) {
-        #rowcon {
-            height: 50%;
-        }
-
-        #userimg {
-            width: 100%;
-            max-width: 245px;
-        }
-
-        #cardprofile {
-            text-align: center;
-        }
-    }
+}
+.title_input{
+    width: 100%;
+}

@@ -1,19 +1,39 @@
+from distutils.command import clean
+
 from django import forms
 
-from polls.models import User, Course_Major
+from polls.models import User, Course_Major, Review, Comment
 
 
-class UserModelForm(forms.ModelForm):
+class ReviewForm(forms.ModelForm):
     class Meta:
-        model = User
-        exclude = ['role', 'verify', 'user_auth', 'img_url']
+        model = Review
+        fields = '__all__'
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'input_name',
-                                           'disabled': True}),
-            'email': forms.TextInput(attrs={'class': 'input_email',
-                                           'disabled': True}),
+            'title': forms.TextInput(attrs={'class': 'title_input'}),
         }
 
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.fields['major'].queryset = Course_Major.objects.none()
+    def clean(self):
+        clean_data = super().clean()
+        title = clean_data.get('title')
+        detail = clean_data.get('detail')
+        if title == '':
+            raise forms.ValidationError('กรุณากรอกข้อมูลให้ถูกต้อง')
+        for j in title:
+            if j.isalpha() == False:
+                raise forms.ValidationError('กรุณากรอกข้อมูลให้ถูกต้อง')
+        for j in detail:
+            if j.isalpha() == False:
+                raise forms.ValidationError('กรุณากรอกข้อมูลให้ถูกต้อง')
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ['id', 'review', 'user_id']
+
+    def clean(self):
+        clean_data = super().clean()
+        title = clean_data.get('review')
+        if title == '':
+            raise forms.ValidationError('กรุณากรอกข้อมูลให้ถูกต้อง')

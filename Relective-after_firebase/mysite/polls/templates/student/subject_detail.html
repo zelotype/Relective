@@ -10,10 +10,77 @@
     <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
-<body>
+<body onload="loading()">
 <div id="app">
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
+    <div id="modal" style="z-index: 10000000000000000">
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
+        </div>
+    </div>
+    <div id="modal2" style="z-index: 100;background-color: rgba(0,0,0,0.5)" v-if="isActive">
+        <button type="button" class="btn btn-link"
+                style="position: absolute;left: 5px;top: 5px;text-decoration: none;background-color: white;border-radius: 20px"
+                @click="reviews">X
+        </button>
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            {#            <button @click="reviews">Test</button>#}
+            <form method="post" action="{% url 'subject_detail_student' subject_purpose.id %}"
+                  style="width: 100%;max-height: 90vh;overflow-y: scroll;color: black" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container" style="border: 5px solid #3578E5;border-radius: 20px;background-color: white">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <img src="{{ member_info.img_url }}" id="userimg">
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>ชื่อหัวข้อคำวิจารณ์</h4>
+
+                        </div>
+                        <div class="col-sm-8" style="text-align: left">
+                            <input type="text" class="form-control" aria-label="Sizing example input"
+                                   aria-describedby="inputGroup-sizing-sm" id="title" name="title">
+                            <input name="user_id" value="{{ member_info.id }}" hidden>
+                            <input name="subject_id" value="{{ subject_purpose.id }}" hidden>
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>รายละเอียด</h4>
+
+                        </div>
+                        <div class="col-sm-8" style="text-align: left">
+                            {{ review_form.detail }}
+                        </div>
+                        <div class="col-sm-12">
+                            <h4>ไม่ระบุตัวตน</h4>
+                            {{ review_form.annonymous }}
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-12" style="margin-bottom: 10px">
+                            <button type="button" class="btn btn-warning" @click="showlink">แนบเอกสาร</button>
+                        </div>
+                        <div class="col-sm-12" v-if="link">
+                            {{ review_form.cover }}
+                        </div>
+                        <div class="col-sm-12" style="margin-bottom: 10px">
+                            <button type="submit" class="btn btn-primary">ยืนยัน</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-4" id="navbg">
@@ -194,40 +261,60 @@
                                                 | {{ rep.name_eng }})</h5>
                                         {% endif %}
                                     {% endfor %}
+                                    <hr>
+
+                                    <button type="button" class="btn btn-light"
+                                            style="margin:auto;background-color: #3578E5 !important;color: white;width: 100%"
+                                            @click="reviews">
+                                        เขียนคำวิจารณ์
+                                    </button>
                                 </div>
+
                             </div>
                         </div>
-                        {% for i in subject_type %}
-                            <div class="col-sm-12" style="padding: 2vw;text-align: center">
-                                <div class="card" id="review">
-                                    <div class="card-header" style="font-weight: bolder">
-                                        หัวข้อรีวิว
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
-                                            accusamus
-                                            asperiores consequatur dignissimos dolores earum est et fuga laborum magni
-                                            molestiae
-                                            molestias obcaecati possimus quisquam, reiciendis soluta totam vel
-                                            voluptatibus.</p>
-                                    </div>
-                                    <div class="card-footer text-muted" style="position: relative;">
-                                        Pitchayapol Petchboonchuay
-                                        <a href="{% url 'review_detail_student' subject_purpose.id %}">
-                                            <div class="btn-group dropright"
-                                                 style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
-                                                <button type="button" class="btn btn-secondary dropdown-toggle"
-                                                        id="tocomment">
-                                                    ดูความคิดเห็นเพิ่มเติม
+                        {% for q in review %}
+                            {% if q.subject_id.id == subject_purpose.id %}
+                                <div class="col-sm-12" style="padding: 2vw;text-align: center">
+                                    <div class="card" id="review">
+                                        <div class="card-header" style="font-weight: bolder;position: relative">
+                                            {{ q.title }}
+                                            <!-- Example single danger button -->
+                                            <div class="btn-group"
+                                                 style="position: absolute;right: 0;margin: auto;top:5px;color: #3578E5;background-color: transparent;border: transparent">
+                                                <button type="button" class="btn dropdown-toggle"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
                                                 </button>
-
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#">รายงาน</a>
+                                                </div>
                                             </div>
-                                        </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">{{ q.detail }}</p>
+                                        </div>
+                                        <div class="card-footer text-muted" style="position: relative;">
+                                            {% if q.annonymous == False %}
+                                                {{ q.user_id.name }}
+                                            {% endif %}
+                                            {% if q.annonymous == True %}
+                                                Annonymous
+                                            {% endif %}
+                                            <a href="{% url 'review_detail_student' subject_purpose.id q.id %}">
+                                                <div class="btn-group dropright"
+                                                     style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
+                                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                                            id="tocomment">
+                                                        ดูความคิดเห็นเพิ่มเติม
+                                                    </button>
+
+                                                </div>
+                                            </a>
+                                        </div>
+
                                     </div>
-
                                 </div>
-                            </div>
-
+                            {% endif %}
                         {% endfor %}
                         <div class="col-sm-12" style="padding: 2vw">
                             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -269,6 +356,7 @@
     <h6 style="margin: auto">© IT KMITL</h6>
 </footer>
 </body>
+<script src="{% static 'action.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -283,12 +371,27 @@
     var app = new Vue({
         el: '#app',
         data: {
-            message: 'Hello Vue!'
+            message: 'Hello Vue!',
+            isActive: false,
+            link: false
         },
         delimiters: ["<%", "%>"],
+        methods: {
+            reviews() {
+                this.isActive = !this.isActive;
+            },
+            showlink() {
+                this.link = !this.link
+            }
+        }
     })
 
     function logOut() {
         location.href = "{% url 'logout' %}"
     }
 </script>
+<style>
+    #title {
+        width: 80%;
+    }
+</style>

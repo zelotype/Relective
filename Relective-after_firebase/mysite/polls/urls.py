@@ -1,5 +1,7 @@
+from django.conf.urls.static import static
 from django.urls import path
 
+from mysite import settings
 from polls import views
 
 urlpatterns = [
@@ -11,8 +13,12 @@ urlpatterns = [
     path('guest/signIn', views.singInbyGuest, name="guest_signIn"),
     path('guest/subject_detail/<int:subject_id>/', views.subject_detail_guest, name="subject_detail_guest"),
     path('guest/subject_detail/<int:subject_id>/review_detail/', views.review_detail_guest, name="review_detail_guest"),
-    path('student/subject_detail/<int:subject_id>/review_detail/', views.review_detail_student,
+    path('student/subject_detail/<int:subject_id>/review_detail/<int:review_id>', views.review_detail_student,
          name="review_detail_student"),
     path('student/setupInformation', views.set_infor_student, name="set_infor_student"),
     path('student/setupInformation/submitform/', views.update_infor_student, name="update_infor_student")
 ]
+
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)

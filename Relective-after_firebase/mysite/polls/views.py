@@ -7,8 +7,9 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from permission import permission
 
-from polls.forms import UserModelForm
-from polls.models import Courese_GenEd, GenEd_Subject, Faculty, Course_Major, Subject_require, Student_Year
+from polls.forms import ReviewForm, CommentForm
+from polls.models import Courese_GenEd, GenEd_Subject, Faculty, Course_Major, Subject_require, Student_Year, Review, \
+    Comment
 from polls.models import User as member
 
 subject_type = Courese_GenEd.objects.all()
@@ -47,8 +48,7 @@ def get_Faculty():
 
 
 def index(request):
-    state_login = request.user
-    if (state_login is not None):
+    if (request.user is not None):
         logout(request)
     adminlist = ['60070045', '60070059']
     if (request.method == 'POST'):
@@ -77,7 +77,9 @@ def index(request):
                     user_obj['img_url'] = cases.img_url;
                     user_obj['role'] = cases.role;
                     user_obj['year_id'] = cases.year_id;
-                return redirect('mainpage_student')
+                    return redirect('mainpage_student')
+                else:
+                    return redirect('set_infor_student')
         else:
             users = User.objects.create(
                 username=request.POST.get('user_name'),
@@ -115,34 +117,31 @@ def set_infor_student(request):
     }
     return render(request, 'student/first_signin_form/setDefalt.html', context=context)
 
+
 @login_required
 def update_infor_student(request):
     list_major1 = [570701, 59072, 59073]
     ans = []
     aaa = member()
     if (request.method == 'POST'):
-        # for fac in faculty_list:
-        #     if int(fac.id) == int(user_obj['faculty_id']):
-        #         for year in Student_Year.objects.all():
-        #             if (int(user_obj['year_id']) == int(year.id)):
-        #                 for ll in Course_Major.objects.all():
-        #                     if (int(ll.id) == int(user_obj['major_id'])):
-        #                         print("yessssssss")
-        #                         aaa = member.objects.create(
-        #                             name=user_obj['name'],
-        #                             role=user_obj['role'],
-        #                             email=user_obj['email'],
-        #                             faculty=fac,
-        #                             major_id=ll.id,
-        #                             year_id=year.id,
-        #                             user_auth=request.user,
-        #                             verify=True,
-        #                             img_url=user_obj['img_url']
-        #                         )
-
-        for j in member.objects.all():
-            if (j.id == 1):
-                aaa = j
+        for fac in faculty_list:
+            if int(fac.id) == int(user_obj['faculty_id']):
+                for year in Student_Year.objects.all():
+                    if (int(user_obj['year_id']) == int(year.id)):
+                        for ll in Course_Major.objects.all():
+                            if (int(ll.id) == int(user_obj['major_id'])):
+                                print("yessssssss")
+                                aaa = member.objects.create(
+                                    name=user_obj['name'],
+                                    role=user_obj['role'],
+                                    email=user_obj['email'],
+                                    faculty=fac,
+                                    major_id=ll.id,
+                                    year_id=year.id,
+                                    user_auth=request.user,
+                                    verify=True,
+                                    img_url=user_obj['img_url'],
+                                )
         user_obj['user_id'] = aaa.id
         for i in request.POST:
             if (i == 'csrfmiddlewaretoken'):
@@ -185,6 +184,7 @@ def update_infor_student(request):
     }
 
     return render(request, 'student/first_signin_form/settingInformation.html', context=context)
+
 
 @login_required
 def mainpage_student(request):
@@ -242,7 +242,8 @@ def mainpage_student(request):
         'sec10': list10,
         'member_info': ans,
         'user': user_obj,
-        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id'])
+        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id']),
+        'review':Review.objects.all()
     }
     return render(request, 'student/mainpage.html', context=context)
 
@@ -252,24 +253,81 @@ def subject_detail_student(request, subject_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
+    ans = ""
+    state_annonymous = False,
+    if request.POST.get('annonymous') == 'on':
+        state_annonymous = True
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if request.method == "POST":
+        form = ReviewForm(request.POST, request.FILES)
+        if request.FILES.get('cover') != "":
+            Review.objects.create(
+                title=request.POST.get('title'),
+                detail=request.POST.get('detail'),
+                subject_id_id=request.POST.get('subject_id'),
+                user_id_id=ans.id,
+                cover=request.FILES.get('cover'),
+                annonymous=state_annonymous,
+                verify=False
+            )
+        else:
+            Review.objects.create(
+                title=request.POST.get('title'),
+                detail=request.POST.get('detail'),
+                subject_id_id=request.POST.get('subject_id'),
+                user_id_id=ans.id,
+                cover=request.FILES.get('cover'),
+                annonymous=state_annonymous,
+            )
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
         'user': user_obj,
-        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id'])
+        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id']),
+        'member_info': ans,
+        'review_form': ReviewForm,
+        'review': Review.objects.all()
     }
     return render(request, 'student/subject_detail.html', context=context)
 
+
 @login_required
-def review_detail_student(request, subject_id):
+def review_detail_student(request, subject_id, review_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
+    point = 0
+    if (Review.objects.get(pk=review_id).rate_point != 0 and Review.objects.get(pk=review_id).human_count != 0):
+        point = Review.objects.get(pk=review_id).rate_point / Review.objects.get(pk=review_id).human_count
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if request.method == 'POST':
+        if (request.POST.get('point') != None):
+            case = Review.objects.get(pk=review_id)
+            case.rate_point += int(request.POST.get('point'))
+            case.human_count += 1
+            case.save()
+            point = Review.objects.get(pk=review_id).rate_point / Review.objects.get(pk=review_id).human_count
+        if (request.POST.get('detail') != None):
+            Comment.objects.create(
+                detail=request.POST.get('detail'),
+                review_id=Review.objects.get(pk=review_id).id,
+                user_id_id=ans.id
+            )
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
+        'subject_req': Subject_require.objects.filter(user_id_id=user_obj['user_id']),
+        'member_info': ans,
+        'review': Review.objects.get(pk=review_id),
+        'point': point,
+        'CommentForm': CommentForm,
+        'comment': Comment.objects.filter(review_id=review_id)
     }
     return render(request, 'student/review_page.html', context=context)
 

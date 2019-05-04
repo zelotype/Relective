@@ -18,6 +18,56 @@
             <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
         </div>
     </div>
+    <div id="modal2" style="z-index: 100;background-color: rgba(0,0,0,0.5)" v-if="isActive">
+        <button type="button" class="btn btn-link"
+                style="position: absolute;left: 5px;top: 5px;text-decoration: none;background-color: white;border-radius: 20px"
+                @click="reviews">X
+        </button>
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            {#            <button @click="reviews">Test</button>#}
+            <form method="post" action="{% url 'review_detail_student' subject_purpose.id review.id %}"
+                  style="width: 100%;max-height: 90vh;overflow-y: scroll;color: black" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="container" style="border: 5px solid #3578E5;border-radius: 20px;background-color: white">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {% if form.errors %}
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <div class="alert alert-danger">
+                                            <strong>{{ error }}</strong>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>{{ error }}</strong>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-sm-12">
+                            <img src="{{ member_info.img_url }}" id="userimg">
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>รายละเอียด</h4>
+                        </div>
+                        <div class="col-sm-7" style="text-align: left">
+                            {{ CommentForm.detail }}
+                        </div>
+                        <div class="col-sm-12" style="margin-bottom: 10px">
+                            <button type="submit" class="btn btn-primary">ยืนยัน</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
     <div class="pos-f-t">
@@ -135,7 +185,7 @@
             <div class="col-lg-2 sm-12" style="padding: 0">
                 <div class="card" id="cardcontainerprofile">
                     <img class="card-img-top"
-                         src="https://www.sony.co.th/image/bc6d25fa6371c2899ce704a2bed7614c?fmt=png-alpha&wid=960"
+                         src="{{ member_info.img_url }}"
                          alt="Card image cap"
                          id="userimg">
                     <div class="card-body" id="cardprofile">
@@ -143,35 +193,36 @@
                         <h6 class="card-title">คณะ: เทคโนโลยีสารสนเทศ</h6>
                         <h6 class="card-title">ชั้นปี: 2</h6>
                         <h6 class="card-title">สาขา: เทคโนโลยีสารสนเทศ</h6>
-                        <div class="btn-group btn-block">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" id="subjectbtn">
-                                หมอกร้าย
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right" id="showsubject"
-                                 style="max-height: 200px;overflow-y: scroll">
+                        {% for req in subject_req %}
+                            <div class="btn-group btn-block">
 
-                                {% for i in subject_name %}
-
-                                    <button class="dropdown-item" type="button"><a
-                                            href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
-                                        | {{ i.name_th }}</a>
+                                {% if req.status == False %}
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" id="subjectbtn">
+                                        {{ req.subject_type.name }}
                                     </button>
+                                {% endif %}
+                                {% if req.status == True %}
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" id="subjectbtn" disabled>
+                                        {{ req.subject_type.name }}
+                                    </button>
+                                {% endif %}
+                                <div class="dropdown-menu dropdown-menu-right" id="showsubject"
+                                     style="max-height: 200px;overflow-y: scroll">
 
-                                {% endfor %}
+                                    {% for i in subject_name %}
+                                        {% if i.categories.id == req.subject_type.id %}
+                                            <button class="dropdown-item" type="button"><a id="findsubject"
+                                                                                           href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
+                                                | {{ i.name_th }}</a></button>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="btn-group btn-block">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false" id="subjectbtn" disabled>
-                                มนุษย์ศาสตร์
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <button class="dropdown-item" type="button">Action</button>
-                                <button class="dropdown-item" type="button">Another action</button>
-                                <button class="dropdown-item" type="button">Something else here</button>
-                            </div>
-                        </div>
+                        {% endfor %}
                         {#                    <button type="button" class="btn btn-secondary btn-lg btn-block" disabled id="subjectbtn">การเต้น#}
                         {#                    </button>#}
                     </div>
@@ -182,46 +233,62 @@
                     <div class="row" id="guestrow">
                         <div class="col-sm-12" style="padding: 2vw">
                             <div class="card" style="text-align: left;">
-                                <h5 style="background: linear-gradient(90deg,brown,#FF9000);font-weight: bolder;color: white"
-                                    class="card-header">หัวข้อรีวิว</h5>
+                                <h5 style="background: linear-gradient(90deg,brown,#FF9000);font-weight: bolder;color: white;position: relative"
+                                    class="card-header">{{ review.title }}
+                                </h5>
+
                                 <div class="card-body">
                                     <h5 class="card-title" style="font-weight: bold">รายละเอียด</h5>
                                     <hr>
-                                    ซองเบย์หว่ะ
+                                    {{ review.detail }}
                                     </h5>
-                                    {% for rep in subject_name %}
-                                        {% if rep.id == subject_purpose.prerequisite %}
-                                            <h5 class="card-title"><b>วิชาบังคับก่อนเรียน :</b> {{ rep.id }}
-                                                ( {{ rep.name_th }}
-                                                | {{ rep.name_eng }})</h5>
-                                        {% endif %}
-                                    {% endfor %}
+
                                 </div>
                                 <div class="card-footer text-muted" style="position: relative;">
-                                    Pitchayapol Petchboonchuay
-                                    {#                        <div class="btn-group dropright"#}
-                                    {#                             style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">#}
-                                    {#                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"#}
-                                    {#                                    aria-haspopup="true" aria-expanded="false" id="tocomment">#}
-                                    {#                                ดูความคิดเห็นเพิ่มเติม#}
-                                    {#                            </button>#}
-                                    {#                        </div>#}
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm-4" style="padding: 0">
+                                                {{ review.user_id.name }} | {% if review.verify == True %}
+                                                <img src="{% static 'verify.svg' %}" style="max-height: 30px">
+                                            {% endif %}
+                                            </div>
+                                            <div class="col-sm-3" style="padding: 0;text-align: left">
+                                                <form method="post"
+                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}">
+                                                    {% csrf_token %}
+                                                    <select class="custom-select" name="point" style="width: 50%">
+                                                        <option value="0" selected>0</option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-primary">ให้คะแนน</button>
+                                                </form>
+                                            </div>
+                                            <div class="col-sm-2" style="padding: 0;text-align: left">
+                                                <div style="margin-top: 5px">{{ point }} คะแนน</div>
+                                            </div>
+                                            <div class="col-sm-2" style="padding: 0;text-align: right">
+                                                <button type="button" class="btn btn-light"
+                                                        style="background-color: #3578E5 !important;color: white"
+                                                        @click="reviews">
+                                                    เขียนความคิดเห็น
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        {% for i in subject_type %}
+                        {% for i in comment %}
                             <div class="col-sm-12" style="padding: 2vw;text-align: center">
                                 <div class="card" id="review">
-                                    <div class="card-header" style="font-weight: bolder">
-                                        ชื่อคนคอมเม้น
-                                    </div>
                                     <div class="card-body">
-                                        <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A
-                                            accusamus
-                                            asperiores consequatur dignissimos dolores earum est et fuga laborum magni
-                                            molestiae
-                                            molestias obcaecati possimus quisquam, reiciendis soluta totam vel
-                                            voluptatibus.</p>
+                                        <h5>{{ i.user_id.name }}</h5>
+                                        <hr>
+                                        <p class="card-text">{{ i.detail }}</p>
                                     </div>
 
                                 </div>
@@ -286,7 +353,12 @@
         data: {
             message: 'Hello Vue!',
             count: 1,
-        }, method: {},
+            isActive: false
+        }, methods: {
+            reviews() {
+                this.isActive = !this.isActive;
+            },
+        },
         delimiters: ["<%", "%>"],
 
     })
@@ -295,3 +367,8 @@
         location.href = "{% url 'logout' %}"
     }
 </script>
+<style>
+    #id_detail {
+        width: 100%;
+    }
+</style>
