@@ -18,6 +18,42 @@
             <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
         </div>
     </div>
+
+    <form method="post" action="{% url 'review_detail_student' subject_purpose.id review.id %}">
+        {% csrf_token %}
+        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLongTitle"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">รายงานกระทู้</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    เหตุผลในการรายงาน
+                                </div>
+                                <div class="col-sm-7">
+                                    <input name="report" value="1" hidden>
+                                    {{ ReportReview.detail_review }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="color: #3578E5">Close</button>
+                        <button type="submit" class="btn btn-primary">รายงาน</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <div id="modal2" style="z-index: 100;background-color: rgba(0,0,0,0.5)" v-if="isActive">
         <button type="button" class="btn btn-link"
                 style="position: absolute;left: 5px;top: 5px;text-decoration: none;background-color: white;border-radius: 20px"
@@ -58,6 +94,15 @@
                         </div>
                         <div class="col-sm-7" style="text-align: left">
                             {{ CommentForm.detail }}
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-3">
+                            <h4>ไม่ระบุตัวตน</h4>
+                        </div>
+                        <div class="col-sm-7" style="text-align: left">
+                            {{ CommentForm.annonymous }}
                         </div>
                         <div class="col-sm-12" style="margin-bottom: 10px">
                             <button type="submit" class="btn btn-primary">ยืนยัน</button>
@@ -236,16 +281,12 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-sm-8"><h3 style="margin: auto">{{ review.title }}</h3></div>
-                                            <div class="col-sm-4">
-                                                <form method="post"
-                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}">
-                                                    {% csrf_token %}
-                                                    <input name="plus" hidden value="1">
-                                                    <button type="submit" class="btn btn-light"
-                                                            style="margin:auto;background:linear-gradient(90deg,#3578E5,#FA7921);color: white;width: 100%">
-                                                        รายงานบทวิจารณ์นี้
-                                                    </button>
-                                                </form>
+                                            <div class="col-sm-4" style="text-align: right">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#exampleModalLong"
+                                                        style="background:linear-gradient(90deg,#083D77,#FA7921);width: 100%;border: 1px solid white">
+                                                    รายงานกระทู้
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -269,7 +310,8 @@
                                             </div>
                                             <div class="col-sm-6" style="padding: 0;text-align: left">
                                                 <form method="post"
-                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}" style="margin: auto">
+                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}"
+                                                      style="margin: auto">
                                                     {% csrf_token %}
                                                     <div class="container-fluid">
                                                         <div class="row">
@@ -307,7 +349,8 @@
                                             <div class="col-sm-2" style="padding: 0;text-align: left">
                                                 <div style="margin-top: 5px">{{ RateReview }} คะแนน</div>
                                             </div>
-                                            <div class="col-sm-12" style="padding: 0;text-align: center;margin-top: 10px">
+                                            <div class="col-sm-12"
+                                                 style="padding: 0;text-align: center;margin-top: 10px">
 
                                                 <button type="button" class="btn btn-light"
                                                         style="background-color: #3578E5 !important;color: white;width: 100%"
@@ -330,19 +373,28 @@
                                         <div class="container">
                                             <div class="row">
                                                 <div class="col-sm-8">
-                                                    <h5>{{ i.user_id.name }}</h5>
-
+                                                    <div style="margin: auto"><h5>{% if i.annonymous == True %}
+                                                        Annonymous{% endif %}</h5>
+                                                        <h5>{% if i.annonymous == False %}
+                                                            {{ i.user_id.name }}{% endif %}</h5></div>
                                                 </div>
-                                                <div class="col-sm-4">
+                                                <div class="col-sm-4" style="text-align: right">
                                                     <div class="dropdown">
                                                         <button class="btn btn-primary dropdown-toggle" type="button"
                                                                 id="dropdownMenu2" data-toggle="dropdown"
                                                                 aria-haspopup="true" aria-expanded="false"
                                                                 style="background-color: transparent !important;border: transparent;color: #3578E5">
                                                         </button>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                            <button class="dropdown-item" type="button">รายงาน</button>
-                                                        </div>
+                                                        <form method="post"
+                                                              action="{% url 'review_detail_student' subject_purpose.id review.id %}">
+                                                            {% csrf_token %}
+                                                            <input name="report" value="2" hidden>
+                                                            <input name="commentidreport" value="{{ i.id }}" hidden>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                                <button class="dropdown-item" type="submit">รายงาน
+                                                                </button>
+                                                            </div>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
@@ -419,6 +471,8 @@
         }, methods: {
             reviews() {
                 this.isActive = !this.isActive;
+                document.getElementById('id_detail').style.width = '80%';
+                document.getElementById('id_detail').style.height = '300px';
             }, heart1() {
                 if (this.rate == 1) {
                     document.getElementById('one').style = "https://image.flaticon.com/icons/svg/126/126482.svg')"
@@ -513,6 +567,15 @@
     #id_detail {
         width: 100%;
     }
+
+    #id_detail_review {
+        width: 100%;
+    }
+
+    .detail_input {
+        width: 100%;
+    }
+
 
     #one, #two, #three, #four, #five {
         margin: auto;

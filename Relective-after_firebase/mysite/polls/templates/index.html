@@ -120,17 +120,21 @@
         },
         // methods
         methods: {
-            alertModal() {
-                document.getElementById('modal1').style.display = "none";
-            },
             logout() {
                 firebase.auth().signOut().then(function () {
-                    alert("Please SignIn By KMITL E-mail")
                 }, function (error) {
                     // An error happened.
                 });
             },
+            alertModal() {
+                this.logout()
+                document.getElementById('modal1').style.display = "none";
+            },
             login() {
+                let provider = new firebase.auth.GoogleAuthProvider();
+                provider.setCustomParameters({
+                    prompt: 'select_account'
+                });
                 firebase.auth().signInWithPopup(provider).then(function (result) {
                     var token = result.credential.accessToken;
                     var user = result;

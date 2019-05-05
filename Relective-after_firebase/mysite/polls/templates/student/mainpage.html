@@ -261,7 +261,9 @@
                                 </h5>
 
                                 <div class="card-body">
-                                    <h5 class="card-title" style="font-weight: bold"><small>รายละเอียด</small></h5>
+                                    <h5 class="card-title" style="font-weight: bold">
+                                        <small>รายละเอียด</small>
+                                    </h5>
                                     <hr>
                                     <% review_desc %>
                                     </h5>
@@ -782,7 +784,15 @@
                         var header = "{{ i.title }}";
                         if (header == this.search) {
                             this.review_title = "{{ i.title }}";
-                            this.review_desc = '"{{ i.detail }}"';
+                            caz = ''
+                            {% for j in i.detail %}
+                                {% if j.isalpha == True %}
+                                    caz = caz + '{{ j }}';
+                                {% endif %}
+                            {% endfor %}
+                            this.review_desc = caz
+
+
                             this.review_by = "{{ i.user_id.role }}";
 
                             chk = true;
@@ -796,7 +806,7 @@
                     if (chk == false) {
                         alert("ค้นหาไม่สำเร็จ กรุณากรอกรายละเอียดให้ตรบถ้วน")
                     }
-                }else {
+                } else {
                     alert('กรุณาเลือกรูปแบบในการค้นหา')
                 }
             },

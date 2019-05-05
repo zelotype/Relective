@@ -40,7 +40,7 @@
                             <hr>
                         </div>
                         <div class="col-sm-4">
-                            <h4>ชื่อหัวข้อคำวิจารณ์</h4>
+                            <h4>ชื่อกระทู้</h4>
 
                         </div>
                         <div class="col-sm-8" style="text-align: left">
@@ -58,6 +58,28 @@
                         </div>
                         <div class="col-sm-8" style="text-align: left">
                             {{ review_form.detail }}
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>อาจารย์ที่สอน</h4>
+
+                        </div>
+                        <div class="col-sm-8" style="text-align: left">
+                            {{ review_form.teacher_name }}
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
+                        </div>
+                        <div class="col-sm-4">
+                            <h4>ปีการศึกษา</h4>
+                        </div>
+                        <div class="col-sm-8" style="text-align: left">
+                            {{ review_form.study_year }}
+                        </div>
+                        <div class="col-sm-12">
+                            <hr>
                         </div>
                         <div class="col-sm-12">
                             <h4>ไม่ระบุตัวตน</h4>
@@ -206,7 +228,6 @@
                         <h6 class="card-title">สาขา: {{ member_info.major.name }}</h6>
                         {% for req in subject_req %}
                             <div class="btn-group btn-block">
-
                                 {% if req.status == False %}
                                     <button type="button" class="btn btn-secondary dropdown-toggle"
                                             data-toggle="dropdown"
@@ -242,23 +263,16 @@
             <div class="col-lg-10 sm-12" style="padding: 0">
                 <div class="container-fluid" id="guestright">
                     <div class="row" id="guestrow">
-                        <div class="col-sm-12" style="margin:auto">
-                            {% if review_form.errors %}
-                                {% for field in review_form %}
-                                    {% for error in field.errors %}
-                                        <div class="alert alert-danger">
-                                            <strong>{{ error }}</strong>
-                                        </div>
+                        {% if review_form.non_field_errors %}
+                            <div class="col-sm-12" style="margin-top: 10px;">
+                                <div class="alert alert-danger" role="alert">
+                                    {% for error in review_form.non_field_errors %}
+                                        {{ error }}
                                     {% endfor %}
-                                {% endfor %}
-                                {% for error in review_form.non_field_errors %}
-                                    <div class="alert alert-danger">
-                                        <strong>{{ error }}</strong>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-12" style="padding: 2vw">
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="col-sm-12" style="padding: 2vw;padding-top: 0">
                             <div class="card" style="text-align: left;">
                                 <h5 style="background: linear-gradient(90deg,brown,#FF9000);font-weight: bolder;color: white"
                                     class="card-header">{{ subject_purpose.id }} | {{ subject_purpose.name_th }}
@@ -305,16 +319,6 @@
                                         <div class="card-header" style="font-weight: bolder;position: relative">
                                             {{ q.title }}
                                             <!-- Example single danger button -->
-                                            <div class="btn-group"
-                                                 style="position: absolute;right: 0;margin: auto;top:5px;color: #3578E5;background-color: transparent;border: transparent">
-                                                <button type="button" class="btn dropdown-toggle"
-                                                        data-toggle="dropdown" aria-haspopup="true"
-                                                        aria-expanded="false">
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">รายงาน</a>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="card-body">
                                             <p class="card-text">{{ q.detail }}</p>
@@ -417,7 +421,12 @@
     }
 </script>
 <style>
-    #title {
+    #title, #id_teacher_name, #id_study_year {
         width: 80%;
+    }
+
+    #id_detail {
+        width: 80%;
+        height: 200px;
     }
 </style>

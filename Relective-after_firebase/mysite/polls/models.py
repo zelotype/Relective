@@ -65,7 +65,7 @@ class User(models.Model):
     Role = ((admin, "Admin"),
             (student, "Student"),
             (teacher, "Teacher"))
-    role = models.CharField(max_length=10, choices=Role)
+    role = models.CharField(max_length=20, choices=Role)
     faculty = models.ForeignKey(Faculty, on_delete=models.PROTECT)
     year = models.ForeignKey(Student_Year, on_delete=models.PROTECT)
     email = models.EmailField()
@@ -76,15 +76,15 @@ class User(models.Model):
 
 
 class Review(models.Model):
-    title = models.CharField(max_length=255, null=True)
+    title = models.CharField(max_length=10000, null=True)
     detail = models.TextField(null=True, blank=True)
     subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.CASCADE)
     verify = models.BooleanField(null=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     cover = models.ImageField(upload_to='images/', null=True)
-    report = models.IntegerField(default=0)
     annonymous = models.BooleanField(default=False, )
-    report_detail = models.TextField(null=True, blank=True)
+    teacher_name = models.CharField(max_length=1000,null=False)
+    study_year = models.IntegerField()
 
 
 class Comment(models.Model):
@@ -92,6 +92,7 @@ class Comment(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     detail = models.TextField(null=False)
     report = models.IntegerField(default=0)
+    annonymous = models.BooleanField(default=False)
 
 
 class RateReview(models.Model):
@@ -105,3 +106,9 @@ class Subject_require(models.Model):
     subject_type = models.ForeignKey(Courese_GenEd, on_delete=models.PROTECT)
     status = models.BooleanField(default=False, null=False)
     subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.PROTECT, null=True)
+
+
+class ReportReview(models.Model):
+    review = models.ForeignKey(Review,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    detail_review = models.TextField(null=True)

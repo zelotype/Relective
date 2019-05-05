@@ -2,14 +2,17 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.views import logout_then_login
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 # Create your views here.
 from permission import permission
-
-from polls.forms import ReviewForm, CommentForm
+# from pythainlp.segment import segment
+# -*- coding: utf-8 -*-
+from mysite import settings
+from polls.forms import ReviewForm, CommentForm, ReportForm
 from polls.models import Courese_GenEd, GenEd_Subject, Faculty, Course_Major, Subject_require, Student_Year, Review, \
-    Comment, RateReview
+    Comment, RateReview, ReportReview
 from polls.models import User as member
 
 subject_type = Courese_GenEd.objects.all()
@@ -65,6 +68,7 @@ def index(request):
         }
         if user:
             login(request, user)
+            chk = False
             for cases in member.objects.all():
                 if (user.id == cases.user_auth_id):
                     user_obj['user_id'] = cases.id;
@@ -78,8 +82,8 @@ def index(request):
                     user_obj['role'] = cases.role;
                     user_obj['year_id'] = cases.year_id;
                     return redirect('mainpage_student')
-                else:
-                    return redirect('set_infor_student')
+            if chk == False:
+                return redirect('set_infor_student')
         else:
             users = User.objects.create(
                 username=request.POST.get('user_name'),
@@ -98,10 +102,58 @@ def my_logout(request):
     logout_then_login(request, "index")
 
 
-# admin
-# @login_required
-def mainpage_admin(request):
-    return render()
+###### admin ######
+def adminPanel(request):
+    com = []
+    if request.method == 'POST':
+        if request.POST.get('form_') == '1':
+            for ans in Review.objects.all():
+                if ans.id == int(request.POST.get('value_')):
+                    ans.verify = True
+                    ans.save()
+        elif request.POST.get('form_') == '2':
+            for ans in Review.objects.all():
+                if ans.id == int(request.POST.get('value_')):
+                    ans.cover = ''
+                    ans.save()
+        elif request.POST.get('form_') == '3':
+            for j in ReportReview.objects.all():
+                if j.id == int(request.POST.get('value_')):
+                    j.delete()
+        elif request.POST.get('form_') == '4':
+            for j in ReportReview.objects.all():
+                if j.id == int(request.POST.get('value_')):
+                    for z in ReportReview.objects.all():
+                        if j.review.id == z.review.id:
+                            z.delete()
+                    for z in Review.objects.all():
+                        if z.id == j.review.id:
+                            z.delete()
+                            subject = 'แจ้งเตือนการลบกระทู้'
+                            message = 'เนื่องจากมีการรายงานกระทู้'+z.title+'มีเนื้อดังนี้'+z.detail+'ทางผู้ดูแลได้ตรวจเช็คกระทู้และเห็นสมควรว่าต้องทำการลบออก'
+                            email_from = settings.EMAIL_HOST_USER
+                            recipient_list = [z.user_id.email]
+                            send_mail(subject, message, email_from, recipient_list)
+                    j.delete()
+
+        elif request.POST.get('form_') == '5':
+            for j in Comment.objects.all():
+                if j.id == int(request.POST.get('value_')):
+                    j.report -= 1
+                    j.save()
+        elif request.POST.get('form_') == '6':
+            for j in Comment.objects.all():
+                if j.id == int(request.POST.get('value_')):
+                    j.delete()
+    for i in Comment.objects.all():
+        if (i.report > 0):
+            com.append(i)
+    context = {
+        'review': Review.objects.filter(verify=False),
+        'report_review': ReportReview.objects.all(),
+        'comment': com
+    }
+    return render(request, 'administrator/adminPanel.html', context=context)
 
 
 # student
@@ -130,7 +182,6 @@ def update_infor_student(request):
                     if (int(user_obj['year_id']) == int(year.id)):
                         for ll in Course_Major.objects.all():
                             if (int(ll.id) == int(user_obj['major_id'])):
-                                print("yessssssss")
                                 aaa = member.objects.create(
                                     name=user_obj['name'],
                                     role=user_obj['role'],
@@ -149,10 +200,8 @@ def update_infor_student(request):
             else:
                 for z in request.POST.getlist(i):
                     if (int(z) == 0):
-                        print("asdadadad")
                         for x in navbar_subject():
                             if (int(x.id) == int(i)):
-                                print(i)
                                 Subject_require.objects.create(
                                     status=False,
                                     user_id_id=aaa.id,
@@ -184,6 +233,16 @@ def update_infor_student(request):
     }
 
     return render(request, 'student/first_signin_form/settingInformation.html', context=context)
+
+
+@login_required
+def studentInfo(request):
+
+    context ={
+        'user':member.objects.get(user_auth_id=request.user.id),
+        'subject_req':Subject_require.objects.filter()
+    }
+    return render(request, 'student/settingInfo.html',context=context)
 
 
 @login_required
@@ -263,34 +322,32 @@ def subject_detail_student(request, subject_id):
             ans = i
     if request.method == "POST":
         print(request.POST)
-        if request.POST.get('plus') == '1':
-            ans = Review.objects.get(pk=subject_id)
-            ans.report += 1
-            ans.save()
-        else:
-            reviewform = ReviewForm(request.POST, request.FILES)
-            if (reviewform.is_valid()):
-                if request.FILES.get('cover') != "":
-                    Review.objects.create(
-                        title=request.POST.get('title'),
-                        detail=request.POST.get('detail'),
-                        subject_id_id=request.POST.get('subject_id'),
-                        user_id_id=ans.id,
-                        cover=request.FILES.get('cover'),
-                        annonymous=state_annonymous,
-                        verify=False
-                    )
-                else:
-                    Review.objects.create(
-                        title=request.POST.get('title'),
-                        detail=request.POST.get('detail'),
-                        subject_id_id=request.POST.get('subject_id'),
-                        user_id_id=ans.id,
-                        cover=request.FILES.get('cover'),
-                        annonymous=state_annonymous,
-                    )
+        reviewform = ReviewForm(request.POST, request.FILES)
+        if (reviewform.is_valid()):
+            print('Vilid')
+            if request.FILES.get('cover') != "":
+                Review.objects.create(
+                    title=request.POST.get('title'),
+                    detail=request.POST.get('detail'),
+                    subject_id_id=request.POST.get('subject_id'),
+                    user_id_id=ans.id,
+                    cover=request.FILES.get('cover'),
+                    annonymous=state_annonymous,
+                    verify=False,
+                    teacher_name=request.POST.get('teacher_name'),
+                    study_year=request.POST.get('study_year')
+                )
+            else:
+                Review.objects.create(
+                    title=request.POST.get('title'),
+                    detail=request.POST.get('detail'),
+                    subject_id_id=request.POST.get('subject_id'),
+                    user_id_id=ans.id,
+                    cover=request.FILES.get('cover'),
+                    annonymous=state_annonymous,
+                )
     else:
-        reviewform = ReviewForm
+        reviewform = ReviewForm()
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
@@ -309,26 +366,39 @@ def review_detail_student(request, subject_id, review_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
+    anno = False
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
     if request.method == 'POST':
-        if request.POST.get('plus') == '1':
-            ans = Review.objects.get(pk=review_id)
-            ans.report += 1
-            ans.save()
+        if request.POST.get('report') == '1':
+            ReportReview.objects.create(
+                review_id=review_id,
+                user_id=ans.id,
+                detail_review=request.POST.get('detail_review')
+            )
+        elif request.POST.get('report') == '2':
+            for i in Comment.objects.all():
+
+                if i.id == int(request.POST.get('commentidreport')):
+                    i.report += 1
+                    i.save()
         else:
+            print(request.POST)
+            if request.POST.get('annonymous') == 'on':
+                anno = True
             if (request.POST.get('detail') != None):
+                print("Reviewed")
                 Comment.objects.create(
                     detail=request.POST.get('detail'),
                     review_id=Review.objects.get(pk=review_id).id,
-                    user_id_id=ans.id
+                    user_id_id=ans.id,
+                    annonymous=anno
                 )
             if (request.POST.get('point')):
                 listchk = RateReview.objects.all()
                 chk = False
                 for i in listchk:
-                    print(i)
                     if (i.review.id == review_id and i.user.id == ans.id):
                         i.point = request.POST.get('point')
                         i.save()
@@ -343,7 +413,6 @@ def review_detail_student(request, subject_id, review_id):
     for j in RateReview.objects.all():
         if (j.review.id == review_id):
             rate += int(j.point)
-            print(j)
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
@@ -353,7 +422,8 @@ def review_detail_student(request, subject_id, review_id):
         'review': Review.objects.get(pk=review_id),
         'CommentForm': CommentForm,
         'comment': Comment.objects.filter(review_id=review_id),
-        'RateReview': rate
+        'RateReview': rate,
+        'ReportReview': ReportForm
     }
     return render(request, 'student/review_page.html', context=context)
 
