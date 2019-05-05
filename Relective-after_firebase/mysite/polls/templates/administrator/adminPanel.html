@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+</head>
+<body>
+<div id="app">
+    <div class="bg-image-black"></div>
+    <div class="bg-image"></div>
+    <div class="pos-f-t">
+        <nav class="navbar navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarToggleExternalContent"
+                    aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a href="{% url 'mainpage_student' %}">
+                <div style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div>
+            </a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
+                    <div class="dropdown-divider"></div>
+                    <a href="{% url 'index' %}">
+                        <button class="dropdown-item" type="button">ลงชื่อออก</button>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    {#<div style="bottom: 0; background-color: red;width: 100%">#}
+    {#  <div class="h-25 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 25%</div>#}
+    {#  <div class="h-50 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 50%</div>#}
+    {#  <div class="h-75 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 75%</div>#}
+    {#  <div class="h-100 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 100%</div>#}
+    {#</div>#}
+    <div class="container-fluid" id="contai" style="height: 95vh;overflow-y: scroll">
+        <div class="row" id="rowcon">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6" style="height: 90vh;overflow-y: scroll;border: 5px solid white">
+                        <div class="container-fluid" style="width: 100%;margin: auto;padding: 0;">
+                            <div class="row">
+                                {% for q in review %}
+                                    {% if q.cover != '' %}
+                                        <div class="col-sm-12">
+                                            <div class="col-sm-12" style="padding: 10px;text-align: center">
+                                                <div class="card" id="review" style="width: 80%">
+                                                    <div class="card-header"
+                                                         style="font-weight: bolder;position: relative">
+                                                        หัวข้อ : {{ q.title }}
+                                                        {#                                                        <!-- Example single danger button -->#}
+
+
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p class="card-text">
+                                                            รายละเอียด : {{ q.detail }}
+                                                        </p>
+                                                        <hr>
+                                                        <img src="{{ q.cover.url }}"
+                                                             style="width: 100%">
+                                                        <hr>
+                                                        <p class="card-text">
+                                                            อาจารย์ : {{ q.teacher_name }}
+                                                        </p>
+                                                        <hr>
+                                                        <p class="card-text">
+                                                            ปีการศึกษา : {{ q.study_year }}
+                                                        </p>
+                                                        <hr>
+                                                        <div style="width: 100%;text-align: center">
+
+                                                            <form id="verifyform" method="post"
+                                                                  action="{% url 'adminPanel' %}">
+                                                                {% csrf_token %}
+                                                                <input name="form_" v-bind:value="state" hidden>
+                                                                <input name="value_" value="{{ q.id }}" hidden>
+                                                                <button @click="passverify" class="btn btn-success">ผ่าน
+                                                                </button>
+                                                                |
+                                                                <button @click="rejectverify" class="btn btn-danger">
+                                                                    ไม่ผ่าน
+                                                                </button>
+                                                            </form>
+
+
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="card-footer text-muted" style="position: relative;">
+                                                        {{ q.user_id.name }}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" style="padding: 0">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-sm-12" style="height: 45vh;overflow-y: scroll;border: 5px solid #083D77;">
+                                    <div class="container-fluid" style="padding: 0;">
+                                        <div class="row">
+                                            {% for q in review %}
+                                                {% for j in report_review %}
+                                                    {% if q.id == j.review.id %}
+                                                        <div class="col-sm-12">
+                                                            <div class="col-sm-12"
+                                                                 style="padding: 10px;text-align: center">
+                                                                <div class="card" id="review" style="width: 80%">
+                                                                    <div class="card-header"
+                                                                         style="font-weight: bolder;position: relative">
+                                                                        หัวข้อ : {{ q.title }}
+                                                                        {#                                                        <!-- Example single danger button -->#}
+
+
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <p class="card-text">
+                                                                            รายละเอียด : {{ q.detail }}
+                                                                        </p>
+                                                                        <hr>
+                                                                        <div style="width: 100%;border: 1px solid #3578E5">
+                                                                            เหตุผลในการรายงาน |
+                                                                            {{ j.detail_review }}
+                                                                        </div>
+                                                                        <hr>
+                                                                        <p class="card-text">
+                                                                            อาจารย์ : {{ q.teacher_name }}
+                                                                        </p>
+                                                                        <hr>
+                                                                        <p class="card-text">
+                                                                            ปีการศึกษา : {{ q.study_year }}
+                                                                        </p>
+                                                                        <hr>
+                                                                        <div style="width: 100%;text-align: center">
+                                                                            <form id="reportreview" method="post"
+                                                                                  action="{% url 'adminPanel' %}">
+                                                                                {% csrf_token %}
+                                                                                <input name="form_" v-bind:value="state"
+                                                                                       hidden>
+                                                                                <input name="value_"
+                                                                                       value="{{ j.id }}" hidden>
+                                                                                <button @click="passreportform"
+                                                                                        class="btn btn-success">
+                                                                                    กระทู้ผ่าน
+                                                                                </button>
+                                                                                |
+                                                                                <button @click="deletereview"
+                                                                                        class="btn btn-danger">ลบกระทู้
+                                                                                </button>
+                                                                            </form>
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    <div class="card-footer text-muted"
+                                                                         style="position: relative;">
+                                                                        {{ q.user_id.name }}
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="height: 45vh;overflow-y: scroll;border: 5px solid #3578E5;">
+                                    <div class="container-fluid" style="padding: 0;height: 45vh;overflow-y: scroll;">
+                                        <div class="row">
+                                            {% for q in comment %}
+                                                <div class="col-sm-12"
+                                                     style="padding: 10px;text-align: center">
+                                                    <div class="card" id="review" style="width: 80%">
+                                                        <div class="card-header"
+                                                             style="font-weight: bolder;position: relative">
+                                                            Comment ของ : {{ q.user_id.name }}
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <p class="card-text">
+                                                                รายละเอียด : {{ q.detail }}
+                                                            </p>
+                                                            <hr>
+                                                            <div style="width: 100%;text-align: center">
+                                                                <form id="commentreport" method="post"
+                                                                      action="{% url 'adminPanel' %}">
+                                                                    {% csrf_token %}
+                                                                    <input name="form_" v-bind:value="state" hidden>
+                                                                    <input name="value_" value="{{ q.id }}" hidden>
+                                                                    <button @click="acceptcomment"
+                                                                            class="btn btn-success">ผ่าน
+                                                                    </button>
+                                                                    |
+                                                                    <button @click="delcomment" class="btn btn-danger">
+                                                                        ลบ comment
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+
+
+                                                        </div>
+                                                        <div class="card-footer text-muted"
+                                                             style="position: relative;">
+                                                            {{ q.user_id.name }}
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer style="position: absolute;width: 100%;bottom: 0;z-index: 10;max-height: 5%;background-color: #FA7921;text-align: center;color: white;padding: 0">
+        <h6 style="margin: auto">© IT KMITL</h6>
+    </footer>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</html>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            state: 0,
+        }, methods: {
+            passverify() {
+                this.state = 1;
+                document.getElementById('verifyform').submit();
+            },
+            rejectverify() {
+                this.state = 2;
+                document.getElementById('verifyform').submit();
+            },
+            passreportform() {
+                this.state = 3;
+                document.getElementById('reportreview').submit();
+
+            },
+            deletereview() {
+                this.state = 4;
+                document.getElementById('reportreview').submit();
+            },
+            acceptcomment() {
+                this.state = 5;
+                document.getElementById('commentreport').submit();
+            },
+            delcomment() {
+                this.state = 6;
+                document.getElementById('commentreport').submit();
+
+            }
+
+        },
+        delimiters: ["<%", "%>"],
+
+    });
+
+    function showing() {
+        document.getElementById('status').style.display = "block";
+    }
+
+    function logOut() {
+        location.href = "{% url 'logout' %}"
+    }
+</script>

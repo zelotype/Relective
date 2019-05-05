@@ -1,0 +1,50 @@
+{
+  "name": "project_isad",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.14",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "firebase": "^5.9.3",
+    "firebaseui": "^3.5.2",
+    "install": "^0.12.2",
+    "node-sass": "^4.11.0",
+    "rebuild": "^0.1.2",
+    "sass-loader": "^7.1.0",
+    "scss": "^0.2.4",
+    "scss-loader": "^0.0.1",
+    "vue": "^2.6.8",
+    "vue-formatter": "^0.0.11",
+    "vue-gapi": "^0.0.10",
+    "vue-google-signin-button": "^1.0.2",
+    "vue-router": "^3.0.2",
+    "vuefire": "^1.4.5",
+    "vuex": "^3.1.0"
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.0.0-beta.53",
+    "@vue/cli-plugin-babel": "^3.5.0",
+    "@vue/cli-plugin-eslint": "^3.5.0",
+    "@vue/cli-service": "^3.5.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "vue-cli-plugin-bootstrap-vue": "^0.1.0",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "plugin:vue/essential",
+      "plugin:prettier/recommended",
+      "eslint:recommended"
+    ]
+  }
+}
