@@ -12,6 +12,7 @@
 </head>
 <body onload="loading()">
 <div id="app1">
+    {#    <audio src="{% static 'bgsong.mp3' %}" autoplay></audio>#}
     <div id="modal" style="z-index: 10000000000000000">
         <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
              id="center_modal">
@@ -43,7 +44,7 @@
     <div class="bg-image"></div>
 
     <div class="container">
-        <div class="row">
+        <div class="row" style="margin-top: -10vh">
             <div class="col-sm-12">
                 <img src="{% static 'logo.gif' %}" class="giflogo">
             </div>
@@ -67,8 +68,13 @@
                 </a>
             </div>
         </div>
+
     </div>
+
 </div>
+<footer style="position: absolute;width: 100%;bottom: 0;z-index: 10;max-height: 5%;background-color: transparent;text-align: center;color: white;padding: 0">
+    <h6 style="margin: auto">© IT KMITL</h6>
+</footer>
 
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

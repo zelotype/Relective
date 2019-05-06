@@ -481,7 +481,7 @@ def review_detail_student(request, subject_id, review_id):
 def mainpage_teacher(request):
     ans = ""
     for i in member.objects.all():
-        if (request.user.id == i.user_auth_id):
+        if (request.user.id == i.user_auth_id and i.role == 'student'):
             return redirect('mainpage_student');
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -539,7 +539,7 @@ def mainpage_teacher(request):
 @login_required
 def subject_detail_teacher(request, subject_id):
     for i in member.objects.all():
-        if (request.user.id == i.user_auth_id):
+        if (request.user.id == i.user_auth_id and i.role == 'student'):
             redirect('mainpage_student');
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -561,7 +561,7 @@ def review_detail_teacher(request, subject_id, review_id):
     subject_purpose = subject_name.get(pk=subject_id)
     ans = ""
     for i in member.objects.all():
-        if (request.user.id == i.user_auth_id):
+        if (request.user.id == i.user_auth_id and i.role == 'student'):
             return redirect('mainpage_student');
     rate = 0
     for j in RateReview.objects.all():

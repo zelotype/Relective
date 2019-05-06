@@ -134,7 +134,8 @@ body {
 
 
 }
-#showsubject{
+
+#showsubject {
     max-height: 200px;
     max-width: 300px;
     overflow-y: scroll;
@@ -267,6 +268,15 @@ body {
         text-align: center;
     }
 }
-.title_input{
+
+.title_input {
     width: 100%;
+}
+
+#carouselExampleIndicators {
+    box-shadow: 5px 5px 5px black !important;
+}
+
+#cardcontainerprofile {
+    box-shadow: 3px 3px 3px black !important;
 }
