@@ -3,7 +3,7 @@
 <html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Relective</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -37,76 +37,74 @@
                 <hr style="background-color: white">
             </div>
             <div class="col-sm-12" style="padding: 30px;padding-top: 15px">
-                <div class="container-fluid"
-                     style="background-color: white;border-radius: 20px;color: black;margin-bottom: 20px;padding-top: 10px">
-                    <div class="row" style="margin-bottom: 20px">
-                        <div class="col-sm-3" style="">
-                            <h3>ชื่อ - นามสกุล</h3>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h3>คณะ</h3>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h3>สาขา</h3>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h3>ชั้นปี</h3>
-                        </div>
-                        <div class="col-sm-12">
-                            <hr>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h5>{{ user.name }}</h5>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h5>{{ user.faculty.name }}</h5>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h5>{{ user.major.name }}</h5>
-                        </div>
-                        <div class="col-sm-3" style="">
-                            <h5>{{ user.year_id }}</h5>
-                        </div>
-                        <div class="col-sm-12">
-                            <hr>
-                        </div>
-                        {% for i in subject_req %}
-                            <div class="col-sm-4" style="">
-
-                                {{ i.subject_type.name }}
-
-                                {% if i.status == True %}
-                                    <select class="custom-select custom-select-lg mb-3" name="{{ i.id }}"
-                                            style="max-height: 50px">
-
-                                        <option value="0" selected>เลือกวิชาที่เคยเรียนมาแล้ว</option>
-                                        {% for k in subject_all %}
-                                            {% if k.categories.id == i.subject_type.id %}
-                                                <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                {% endif %}
-                                {% if i.status == False %}
-                                    <select class="custom-select custom-select-lg mb-3" name="{{ i.id }}"
-                                            style="max-height: 50px" disabled>
-
-                                        <option value="0" selected>เลือกวิชาที่เคยเรียนมาแล้ว</option>
-                                        {% for k in subject_all %}
-                                            {% if k.categories.id == i.subject_type.id %}
-                                                <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                    <hr>
-                                {% endif %}
+                <form method="post" action="{% url 'student_information' %}">
+                {% csrf_token %}
+                    <div class="container-fluid"
+                         style="background-color: white;border-radius: 20px;color: black;margin-bottom: 20px;padding-top: 10px">
+                        <div class="row" style="margin-bottom: 20px">
+                            <div class="col-sm-3" style="background-color: #FA7921;color: white">
+                                <h3>ชื่อ - นามสกุล</h3>
                             </div>
-                        {% endfor %}
-                        <div class="col-sm-12" style="margin-bottom: 10px">
-                            <button type="button" class="btn btn-primary" style="width: 100%">บันทึก</button>
+                            <div class="col-sm-3" style="background-color: #ffcf85;">
+                                <h3>คณะ</h3>
+                            </div>
+                            <div class="col-sm-3" style="background-color: #FA7921;color: white">
+                                <h3>สาขา</h3>
+                            </div>
+                            <div class="col-sm-3" style="background-color: #ffcf85;">
+                                <h3>ชั้นปี</h3>
+                            </div>
+                            <div class="col-sm-12">
+                                <hr>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <h5>{{ user.name }}</h5>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <h5>{{ user.faculty.name }}</h5>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <h5>{{ user.major.name }}</h5>
+                            </div>
+                            <div class="col-sm-3" style="">
+                                <h5>{{ user.year_id }}</h5>
+                            </div>
+                            <div class="col-sm-12">
+                                <hr>
+                            </div>
+                            {% for i in subject_req %}
+                                <div class="col-sm-4" style="">
+
+                                    {{ i.subject_type.name }}
+
+                                    {% if i.status == True %}
+                                        <select class="custom-select custom-select-lg mb-3" name="{{ i.id }}"
+                                                style="max-height: 50px" disabled>
+
+                                            <option value="{{ i.subject_id.id }}" selected>{{ i.subject_id.name_th }}</option>
+                                        </select>
+                                    {% endif %}
+                                    {% if i.status == False %}
+                                        <select class="custom-select custom-select-lg mb-3" name="{{ i.id }}"
+                                                style="max-height: 50px">
+
+                                            <option value="0" selected>เลือกวิชาที่เคยเรียนมาแล้ว</option>
+                                            {% for k in subject_all %}
+                                                {% if k.categories.id == i.subject_type.id %}
+                                                    <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <hr>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <div class="col-sm-12" style="margin-bottom: 10px">
+                                <button type="submit" class="btn btn-primary" style="width: 100%">บันทึก</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
 
         </div>

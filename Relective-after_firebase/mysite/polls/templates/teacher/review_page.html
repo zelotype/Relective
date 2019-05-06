@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Relective</title>
+    <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -12,109 +12,6 @@
 </head>
 <body onload="loading()">
 <div id="app">
-    <div id="modal" style="z-index: 10000000000000000">
-        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
-             id="center_modal">
-            <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
-        </div>
-    </div>
-
-    <form method="post" action="{% url 'review_detail_student' subject_purpose.id review.id %}">
-        {% csrf_token %}
-        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLongTitle"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">รายงานกระทู้</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    เหตุผลในการรายงาน
-                                </div>
-                                <div class="col-sm-7">
-                                    <input name="report" value="1" hidden>
-                                    {{ ReportReview.detail_review }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="color: #3578E5">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">รายงาน</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <div id="modal2" style="z-index: 100;background-color: rgba(0,0,0,0.5)" v-if="isActive">
-        <button type="button" class="btn btn-link"
-                style="position: absolute;left: 5px;top: 5px;text-decoration: none;background-color: white;border-radius: 20px"
-                @click="reviews">X
-        </button>
-        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
-             id="center_modal">
-            {#            <button @click="reviews">Test</button>#}
-            <form method="post" action="{% url 'review_detail_student' subject_purpose.id review.id %}"
-                  style="width: 100%;max-height: 90vh;overflow-y: scroll;color: black" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="container" style="border: 5px solid #3578E5;border-radius: 20px;background-color: white">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            {% if form.errors %}
-                                {% for field in form %}
-                                    {% for error in field.errors %}
-                                        <div class="alert alert-danger">
-                                            <strong>{{ error }}</strong>
-                                        </div>
-                                    {% endfor %}
-                                {% endfor %}
-                                {% for error in form.non_field_errors %}
-                                    <div class="alert alert-danger">
-                                        <strong>{{ error }}</strong>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                        <div class="col-sm-12">
-                            <img src="{{ member_info.img_url }}" id="userimg">
-                        </div>
-                        <div class="col-sm-12">
-                            <hr>
-                        </div>
-                        <div class="col-sm-3">
-                            <h4>รายละเอียด</h4>
-                        </div>
-                        <div class="col-sm-7" style="text-align: left">
-                            {{ CommentForm.detail }}
-                        </div>
-                        <div class="col-sm-12">
-                            <hr>
-                        </div>
-                        <div class="col-sm-3">
-                            <h4>ไม่ระบุตัวตน</h4>
-                        </div>
-                        <div class="col-sm-7" style="text-align: left">
-                            {{ CommentForm.annonymous }}
-                        </div>
-                        <div class="col-sm-12" style="margin-bottom: 10px">
-                            <button type="submit" class="btn btn-primary">ยืนยัน</button>
-                        </div>
-
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
     <div class="pos-f-t">
@@ -145,7 +42,7 @@
                                                 {% for subject_name in subject_name %}
                                                     {% if type.id == subject_name.categories.id %}
                                                         <div class="col-lg-3 col-6" style="margin-bottom: 5px">
-                                                            <a href="{% url 'subject_detail_student' subject_name.id %}">
+                                                            <a href="{% url 'subject_detail_teacher' subject_name.id %}">
                                                                 <button type="button" class="btn"
                                                                         id="btngolink">{{ subject_name.id }}
                                                                     <br> {{ subject_name.name_th }}</button>
@@ -155,8 +52,6 @@
                                                 {% endfor %}
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             {% endif %}
@@ -176,7 +71,7 @@
                                                 {% for subject_name in subject_name %}
                                                     {% if type.id == subject_name.categories.id %}
                                                         <div class="col-lg-3 col-6" style="margin-bottom: 5px">
-                                                            <a href="{% url 'subject_detail_student' subject_name.id %}">
+                                                            <a href="{% url 'subject_detail_teacher' subject_name.id %}">
                                                                 <button type="button" class="btn"
                                                                         id="btngolink">{{ subject_name.id }}
                                                                     <br> {{ subject_name.name_th }}</button>
@@ -203,7 +98,7 @@
                     aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="{% url 'mainpage_student' %}">
+            <a href="{% url 'mainpage_teacher' %}">
                 <div style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div>
             </a>
             <div class="btn-group">
@@ -216,11 +111,6 @@
                             <button class="dropdown-item" type="button">จัดการระบบ</button>
                         </a>
                     {% endif %}
-                    <a href="{% url 'student_information' %}">
-                        <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
-                    </a>
-                    <div class="dropdown-divider"></div>
-
                     <a href="{% url 'index' %}">
                         <button class="dropdown-item" type="button">ลงชื่อออก</button>
                     </a>
@@ -237,51 +127,7 @@
     <div class="container-fluid" id="contai">
         <div class="row" id="rowcon">
 
-            <div class="col-lg-2 sm-12" style="padding: 0">
-                <div class="card" id="cardcontainerprofile">
-                    <img class="card-img-top"
-                         src="{{ member_info.img_url }}"
-                         alt="Card image cap"
-                         id="userimg">
-                    <div class="card-body" id="cardprofile">
-                        <h5 class="card-title">{{ member_info.name }}</h5>
-                        <h6 class="card-title">คณะ: {{ member_info.faculty.name }}</h6>
-                        <h6 class="card-title">ชั้นปี: {{ member_info.year_id }}</h6>
-                        <h6 class="card-title">สาขา: {{ member_info.major.name }}</h6>
-                        {% for req in subject_req %}
-                            <div class="btn-group btn-block">
-
-                                {% if req.status == False %}
-                                    <button type="button" class="btn btn-secondary dropdown-toggle"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false" id="subjectbtn">
-                                        {{ req.subject_type.name }}
-                                    </button>
-                                {% endif %}
-                                {% if req.status == True %}
-                                    <button type="button" class="btn btn-secondary dropdown-toggle"
-                                            data-toggle="dropdown"
-                                            aria-haspopup="true" aria-expanded="false" id="subjectbtn" disabled>
-                                        {{ req.subject_type.name }}
-                                    </button>
-                                {% endif %}
-                                <div class="dropdown-menu dropdown-menu-right" id="showsubject"
-                                     style="max-height: 200px;overflow-y: scroll">
-
-                                    {% for i in subject_name %}
-                                        {% if i.categories.id == req.subject_type.id %}
-                                            <button class="dropdown-item" type="button"><a id="findsubject"
-                                                                                           href="{% url 'subject_detail_student' i.id %}">{{ i.id }}
-                                                | {{ i.name_th }}</a></button>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-10 sm-12">
+            <div class="col-lg-12 sm-12">
                 <div class="container-fluid" id="guestright">
                     <div class="row" id="guestrow">
                         <div class="col-sm-12" style="padding: 2vw">
@@ -290,14 +136,8 @@
                                     class="card-header">
                                     <div class="container-fluid">
                                         <div class="row">
-                                            <div class="col-sm-8"><h3 style="margin: auto">{{ review.title }}</h3></div>
-                                            <div class="col-sm-4" style="text-align: right">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#exampleModalLong"
-                                                        style="background:linear-gradient(90deg,#083D77,#FA7921);width: 100%;border: 1px solid white">
-                                                    รายงานกระทู้
-                                                </button>
-                                            </div>
+                                            <div class="col-sm-12"><h3 style="margin: auto">{{ review.title }}</h3></div>
+
                                         </div>
                                     </div>
                                 </h5>
@@ -313,65 +153,16 @@
                                     <div class="container-fluid">
                                         <div class="row">
                                             <div class="col-sm-4" style="padding: 0">
-                                            {% if review.annonymous == False %}
                                                 <h5 style="margin: auto">{{ review.user_id.name }}</h5>
-                                            {% else %}
-                                                <h5 style="margin: auto">Annonymous</h5>
-                                            {% endif %}
                                                 {% if review.verify == True %}
                                                     <img src="{% static 'verify.svg' %}" style="max-height: 30px">
                                                 {% endif %}
                                             </div>
                                             <div class="col-sm-6" style="padding: 0;text-align: left">
-                                                <form method="post"
-                                                      action="{% url 'review_detail_student' subject_purpose.id review.id %}"
-                                                      style="margin: auto">
-                                                    {% csrf_token %}
-                                                    <div class="container-fluid">
-                                                        <div class="row">
-                                                            <div class="col-sm-2" style="padding: 0">
-                                                                <img id="one" @click="heart1">
 
-                                                            </div>
-                                                            <div class="col-sm-2" style="padding: 0">
-                                                                <img id="two" @click="heart2">
-
-                                                            </div>
-                                                            <div class="col-sm-2" style="padding: 0">
-                                                                <img id="three" @click="heart3">
-
-                                                            </div>
-                                                            <div class="col-sm-2" style="padding: 0">
-                                                                <img id="four" @click="heart4">
-
-                                                            </div>
-                                                            <div class="col-sm-2" style="padding: 0">
-                                                                <img id="five" @click="heart5">
-
-                                                            </div>
-                                                            <div class="col-sm-2" style="padding: 0">
-                                                                <button type="submit" class="btn btn-primary"
-                                                                        style="margin: auto">
-                                                                    <small>ให้คะแนน</small>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <input name="point" v-bind:value="rate" hidden>
-                                                </form>
                                             </div>
                                             <div class="col-sm-2" style="padding: 0;text-align: left">
                                                 <div style="margin-top: 5px">{{ RateReview }} คะแนน</div>
-                                            </div>
-                                            <div class="col-sm-12"
-                                                 style="padding: 0;text-align: center;margin-top: 10px">
-
-                                                <button type="button" class="btn btn-light"
-                                                        style="background-color: #3578E5 !important;color: white;width: 100%"
-                                                        @click="reviews">
-                                                    เขียนความคิดเห็น
-                                                </button>
-
                                             </div>
 
                                         </div>
@@ -399,16 +190,7 @@
                                                                 aria-haspopup="true" aria-expanded="false"
                                                                 style="background-color: transparent !important;border: transparent;color: #3578E5">
                                                         </button>
-                                                        <form method="post"
-                                                              action="{% url 'review_detail_student' subject_purpose.id review.id %}">
-                                                            {% csrf_token %}
-                                                            <input name="report" value="2" hidden>
-                                                            <input name="commentidreport" value="{{ i.id }}" hidden>
-                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                                                <button class="dropdown-item" type="submit">รายงาน
-                                                                </button>
-                                                            </div>
-                                                        </form>
+
                                                     </div>
                                                 </div>
                                             </div>

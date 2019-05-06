@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Relective</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -197,8 +197,16 @@
                         aria-haspopup="true" aria-expanded="false">
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
+                    {% if member_info.role == 'administrator' %}
+                        <a href="{% url 'adminPanel' %}">
+                            <button class="dropdown-item" type="button">จัดการระบบ</button>
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'student_information' %}">
+                        <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
+                    </a>
                     <div class="dropdown-divider"></div>
+
                     <a href="{% url 'index' %}">
                         <button class="dropdown-item" type="button">ลงชื่อออก</button>
                     </a>

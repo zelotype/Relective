@@ -104,6 +104,12 @@ def my_logout(request):
 
 ###### admin ######
 def adminPanel(request):
+    chk = False
+    for i in member.objects.all():
+        if i.user_auth.id == request.user.id and i.role == 'administrator':
+            chk = True
+    if chk == False:
+        return redirect('index')
     com = []
     if request.method == 'POST':
         if request.POST.get('form_') == '1':
@@ -111,6 +117,11 @@ def adminPanel(request):
                 if ans.id == int(request.POST.get('value_')):
                     ans.verify = True
                     ans.save()
+                    subject = 'แจ้งเตือนการอนุมัติกระทู้'
+                    message = 'เนื่องจากกระทู้ที่ชื่อ ' + ans.title + ' มีเนื้อหาดังนี้ ' + ans.detail + ' ทางผู้ดูแลได้ตรวจเช็คกระทู้และเอกสารที่ท่านแนบมาแล้ว พบว่าเห็นสมควรให้ผ่านการอนุมัติ และตัวกระทู้จะมีการรับรองการอนุมัติเพื่อเพิ่มความน่าเชื่อถือให้กับกระทู้ของท่าน ขอขอบคุณที่มาใช้บริการ Relective'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [ans.user_id.email]
+                    send_mail(subject, message, email_from, recipient_list)
         elif request.POST.get('form_') == '2':
             for ans in Review.objects.all():
                 if ans.id == int(request.POST.get('value_')):
@@ -130,7 +141,7 @@ def adminPanel(request):
                         if z.id == j.review.id:
                             z.delete()
                             subject = 'แจ้งเตือนการลบกระทู้'
-                            message = 'เนื่องจากมีการรายงานกระทู้'+z.title+'มีเนื้อดังนี้'+z.detail+'ทางผู้ดูแลได้ตรวจเช็คกระทู้และเห็นสมควรว่าต้องทำการลบออก'
+                            message = 'เนื่องจากมีการรายงานกระทู้' + z.title + 'มีเนื้อดังนี้' + z.detail + 'ทางผู้ดูแลได้ตรวจเช็คกระทู้และเห็นสมควรว่าต้องทำการลบออก'
                             email_from = settings.EMAIL_HOST_USER
                             recipient_list = [z.user_id.email]
                             send_mail(subject, message, email_from, recipient_list)
@@ -160,6 +171,11 @@ def adminPanel(request):
 # @login_required
 @login_required
 def set_infor_student(request):
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if ans == '':
+        return redirect('mainpage_teacher')
     if (request.method == 'POST'):
         user_obj['faculty_id'] = request.POST.get('faculty_id')
         user_obj['major_id'] = request.POST.get('major_id')
@@ -172,6 +188,11 @@ def set_infor_student(request):
 
 @login_required
 def update_infor_student(request):
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if ans == '':
+        return redirect('mainpage_teacher')
     list_major1 = [570701, 570702, 570703]
     ans = []
     aaa = member()
@@ -237,13 +258,29 @@ def update_infor_student(request):
 
 @login_required
 def studentInfo(request):
-
-    context ={
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if ans == '':
+        return redirect('mainpage_teacher')
+    if request.method == 'POST':
+        for i in request.POST:
+            if (i == 'csrfmiddlewaretoken'):
+                pass
+            else:
+                for z in request.POST.getlist(i):
+                    if z != "0":
+                        req = Subject_require.objects.get(pk=int(i))
+                        req.status = True
+                        req.subject_id = GenEd_Subject.objects.get(pk=int(z))
+                        req.save()
+        return redirect('mainpage_student')
+    context = {
         'user': member.objects.get(user_auth_id=request.user.id),
-        'subject_req':Subject_require.objects.filter(user_id=member.objects.get(user_auth_id=request.user.id)),
-        'subject_all':GenEd_Subject.objects.all()
+        'subject_req': Subject_require.objects.filter(user_id=member.objects.get(user_auth_id=request.user.id)),
+        'subject_all': GenEd_Subject.objects.all()
     }
-    return render(request, 'student/settingInfo.html',context=context)
+    return render(request, 'student/settingInfo.html', context=context)
 
 
 @login_required
@@ -252,6 +289,8 @@ def mainpage_student(request):
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
+    if ans == '':
+        return redirect('mainpage_teacher')
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     list1 = []
@@ -310,6 +349,11 @@ def mainpage_student(request):
 
 @login_required
 def subject_detail_student(request, subject_id):
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if ans == '':
+        return redirect('mainpage_teacher')
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
@@ -322,10 +366,8 @@ def subject_detail_student(request, subject_id):
         if (request.user.id == i.user_auth_id):
             ans = i
     if request.method == "POST":
-        print(request.POST)
         reviewform = ReviewForm(request.POST, request.FILES)
         if (reviewform.is_valid()):
-            print('Vilid')
             if request.FILES.get('cover') != "":
                 Review.objects.create(
                     title=request.POST.get('title'),
@@ -364,6 +406,11 @@ def subject_detail_student(request, subject_id):
 
 @login_required
 def review_detail_student(request, subject_id, review_id):
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            ans = i
+    if ans == '':
+        return redirect('mainpage_teacher')
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
@@ -430,9 +477,106 @@ def review_detail_student(request, subject_id, review_id):
 
 
 # teacher
-# @login_required
+@login_required
 def mainpage_teacher(request):
-    return render()
+    ans = ""
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            return redirect('mainpage_student');
+    subject_type = navbar_subject()
+    subject_name = nav_subjet_all()
+    list1 = []
+    list2 = []
+    list3 = []
+    list4 = []
+    list5 = []
+    list6 = []
+    list7 = []
+    list8 = []
+    list9 = []
+    list10 = []
+    rou = 1
+    for i in subject_name:
+        if (rou < 18):
+            list1.append(i)
+        elif (rou < 36):
+            list2.append(i)
+        elif (rou < 54):
+            list3.append(i)
+        elif (rou < 72):
+            list4.append(i)
+        elif (rou < 90):
+            list5.append(i)
+        elif (rou < 108):
+            list6.append(i)
+        elif (rou < 126):
+            list7.append(i)
+        elif (rou < 144):
+            list8.append(i)
+        elif (rou < 162):
+            list9.append(i)
+        elif (rou < 180):
+            list10.append(i)
+        rou += 1
+    context = {
+        'subject_type': subject_type,
+        'subject_name': subject_name,
+        'sec1': list1,
+        'sec2': list2,
+        'sec3': list3,
+        'sec4': list4,
+        'sec5': list5,
+        'sec6': list6,
+        'sec7': list7,
+        'sec8': list8,
+        'sec9': list9,
+        'sec10': list10,
+        'review': Review.objects.all()
+    }
+    return render(request, 'teacher/mainpage.html', context=context)
+
+
+@login_required
+def subject_detail_teacher(request, subject_id):
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            redirect('mainpage_student');
+    subject_type = navbar_subject()
+    subject_name = nav_subjet_all()
+    subject_purpose = subject_name.get(pk=subject_id)
+    state_annonymous = False
+    context = {
+        'subject_purpose': subject_purpose,
+        'subject_type': subject_type,
+        'subject_name': subject_name,
+        'review': Review.objects.all()
+    }
+    return render(request, 'teacher/subject_detail.html', context=context)
+
+
+@login_required
+def review_detail_teacher(request, subject_id, review_id):
+    subject_type = navbar_subject()
+    subject_name = nav_subjet_all()
+    subject_purpose = subject_name.get(pk=subject_id)
+    ans = ""
+    for i in member.objects.all():
+        if (request.user.id == i.user_auth_id):
+            return redirect('mainpage_student');
+    rate = 0
+    for j in RateReview.objects.all():
+        if (j.review.id == review_id):
+            rate += int(j.point)
+    context = {
+        'subject_purpose': subject_purpose,
+        'subject_type': subject_type,
+        'subject_name': subject_name,
+
+        'review': Review.objects.get(pk=review_id),
+        'comment': Comment.objects.filter(review_id=review_id),
+        'RateReview': rate,
+    }
+    return render(request, 'teacher/review_page.html', context=context)
 
 
 # guest
@@ -485,6 +629,7 @@ def mainpage_guest(request):
         'sec8': list8,
         'sec9': list9,
         'sec10': list10,
+        'review': Review.objects.all()
     }
     return render(request, 'guest/mainpage.html', context=context)
 
@@ -493,23 +638,32 @@ def subject_detail_guest(request, subject_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
+
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
-
+        'user': user_obj,
+        'review': Review.objects.all()
     }
     return render(request, 'guest/subject_detail.html', context=context)
 
 
-def review_detail_guest(request, subject_id):
+def review_detail_guest(request, subject_id, review_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
     subject_purpose = subject_name.get(pk=subject_id)
+    rate = 0
+    for j in RateReview.objects.all():
+        if (j.review.id == review_id):
+            rate += int(j.point)
     context = {
         'subject_purpose': subject_purpose,
         'subject_type': subject_type,
         'subject_name': subject_name,
+        'review': Review.objects.get(pk=review_id),
+        'comment': Comment.objects.filter(review_id=review_id),
+        'RateReview': rate,
     }
     return render(request, 'guest/review_page.html', context=context)
 

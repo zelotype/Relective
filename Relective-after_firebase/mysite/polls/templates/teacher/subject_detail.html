@@ -42,7 +42,7 @@
                                                 {% for subject_name in subject_name %}
                                                     {% if type.id == subject_name.categories.id %}
                                                         <div class="col-lg-3 col-6" style="margin-bottom: 5px">
-                                                            <a href="{% url 'subject_detail_guest' subject_name.id %}">
+                                                            <a href="{% url 'subject_detail_teacher' subject_name.id %}">
                                                                 <button type="button" class="btn"
                                                                         id="btngolink">{{ subject_name.id }}
                                                                     <br> {{ subject_name.name_th }}</button>
@@ -71,7 +71,7 @@
                                                 {% for subject_name in subject_name %}
                                                     {% if type.id == subject_name.categories.id %}
                                                         <div class="col-lg-3 col-6" style="margin-bottom: 5px">
-                                                            <a href="{% url 'subject_detail_guest' subject_name.id %}">
+                                                            <a href="{% url 'subject_detail_teacher' subject_name.id %}">
                                                                 <button type="button" class="btn"
                                                                         id="btngolink">{{ subject_name.id }}
                                                                     <br> {{ subject_name.name_th }}</button>
@@ -98,7 +98,7 @@
                     aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a href="{% url 'mainpage_guest' %}">
+            <a href="{% url 'mainpage_teacher' %}">
                 <div style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div>
             </a>
             <div class="btn-group">
@@ -106,8 +106,13 @@
                         aria-haspopup="true" aria-expanded="false">
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
+                    {% if member_info.role == 'administrator' %}
+                        <a href="{% url 'adminPanel' %}">
+                            <button class="dropdown-item" type="button">จัดการระบบ</button>
+                        </a>
+                    {% endif %}
                     <a href="{% url 'index' %}">
-                        <button class="dropdown-item" type="button">ลงชื่อเข้าใช้</button>
+                        <button class="dropdown-item" type="button">ลงชื่อออก</button>
                     </a>
                 </div>
             </div>
@@ -155,6 +160,7 @@
                                                 | {{ rep.name_eng }})</h5>
                                         {% endif %}
                                     {% endfor %}
+
                                 </div>
 
                             </div>
@@ -171,10 +177,13 @@
                                             <p class="card-text">{{ q.detail }}</p>
                                         </div>
                                         <div class="card-footer text-muted" style="position: relative;">
-
-                                            Annonymous
-
-                                            <a href="{% url 'review_detail_guest' subject_purpose.id q.id %}">
+                                            {% if q.annonymous == False %}
+                                                {{ q.user_id.name }}
+                                            {% endif %}
+                                            {% if q.annonymous == True %}
+                                                Annonymous
+                                            {% endif %}
+                                            <a href="{% url 'review_detail_teacher' subject_purpose.id q.id %}">
                                                 <div class="btn-group dropright"
                                                      style="position: absolute !important;right: 5px !important;bottom: 5px;top: 5px">
                                                     <button type="button" class="btn btn-secondary dropdown-toggle"
@@ -250,7 +259,14 @@
             link: false
         },
         delimiters: ["<%", "%>"],
-        methods: {}
+        methods: {
+            reviews() {
+                this.isActive = !this.isActive;
+            },
+            showlink() {
+                this.link = !this.link
+            },
+        }
     })
 
     function logOut() {
