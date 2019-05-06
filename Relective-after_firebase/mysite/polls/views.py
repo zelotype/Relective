@@ -91,7 +91,6 @@ def index(request):
             )
 
             users.set_password(request.POST.get('email'))
-
             users.save()
             login(request, users)
         return redirect('set_infor_student')
@@ -103,6 +102,7 @@ def my_logout(request):
 
 
 ###### admin ######
+@login_required
 def adminPanel(request):
     chk = False
     for i in member.objects.all():
@@ -171,10 +171,11 @@ def adminPanel(request):
 # @login_required
 @login_required
 def set_infor_student(request):
+    ans = ''
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
-    if ans == '':
+    if user_obj['role'] == 'teacher':
         return redirect('mainpage_teacher')
     if (request.method == 'POST'):
         user_obj['faculty_id'] = request.POST.get('faculty_id')
@@ -188,10 +189,11 @@ def set_infor_student(request):
 
 @login_required
 def update_infor_student(request):
+    ans = ''
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
-    if ans == '':
+    if user_obj['role'] == 'teacher':
         return redirect('mainpage_teacher')
     list_major1 = [570701, 570702, 570703]
     ans = []
@@ -258,10 +260,11 @@ def update_infor_student(request):
 
 @login_required
 def studentInfo(request):
+    ans =''
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
-    if ans == '':
+    if user_obj['role'] == 'teacher':
         return redirect('mainpage_teacher')
     if request.method == 'POST':
         for i in request.POST:
@@ -289,7 +292,7 @@ def mainpage_student(request):
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
-    if ans == '':
+    if user_obj['role'] == 'teacher':
         return redirect('mainpage_teacher')
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -349,10 +352,11 @@ def mainpage_student(request):
 
 @login_required
 def subject_detail_student(request, subject_id):
+    ans = ''
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
-    if ans == '':
+    if user_obj['role'] == 'teacher':
         return redirect('mainpage_teacher')
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -406,10 +410,11 @@ def subject_detail_student(request, subject_id):
 
 @login_required
 def review_detail_student(request, subject_id, review_id):
+    ans = ''
     for i in member.objects.all():
         if (request.user.id == i.user_auth_id):
             ans = i
-    if ans == '':
+    if user_obj['role'] == 'teacher':
         return redirect('mainpage_teacher')
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -670,3 +675,6 @@ def review_detail_guest(request, subject_id, review_id):
 
 def singInbyGuest(request):
     return redirect('mainpage_guest')
+
+def adminredirect(request):
+    return HttpResponseRedirect("/admin/")

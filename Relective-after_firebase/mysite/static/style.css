@@ -137,7 +137,7 @@ body {
 
 #showsubject {
     max-height: 200px;
-    max-width: 300px;
+    max-width: 800px;
     overflow-y: scroll;
     overflow-x: scroll;
 
@@ -211,7 +211,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background-color: #d95748;
+    background:linear-gradient(90deg,#d95748,brown);
     z-index: 2000;
 }
 
@@ -279,4 +279,7 @@ body {
 
 #cardcontainerprofile {
     box-shadow: 3px 3px 3px black !important;
+}
+.navbar{
+    box-shadow: 2px 2px 2px black !important;
 }

@@ -10,10 +10,16 @@
     <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
-<body>
+<body onload="loading()">
 <div id="app">
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
+    <div id="modal" style="z-index: 10000000000000000">
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
+        </div>
+    </div>
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-4" id="navbg">
@@ -106,10 +112,10 @@
                         aria-haspopup="true" aria-expanded="false">
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    {% if member_info.role == 'administrator'  %}
-                    <a href="{% url 'adminPanel' %}">
-                        <button class="dropdown-item" type="button">จัดการระบบ</button>
-                    </a>
+                    {% if member_info.role == 'administrator' %}
+                        <a href="{% url 'adminPanel' %}">
+                            <button class="dropdown-item" type="button">จัดการระบบ</button>
+                        </a>
                     {% endif %}
                     <a href="{% url 'student_information' %}">
                         <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
@@ -705,6 +711,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="{% static 'action.js' %}"></script>
 </html>
 <script>
     var app = new Vue({

@@ -9,11 +9,18 @@
 
     <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="{% static 'action.js' %}"></script>
 </head>
-<body>
+<body onload="loading()">
 <div id="app">
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
+    <div id="modal" style="z-index: 10000000000000000">
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
+        </div>
+    </div>
     <div class="pos-f-t">
         <nav class="navbar navbar-dark bg-dark">
 
@@ -92,7 +99,7 @@
                                             <option value="0" selected>เลือกวิชาที่เคยเรียนมาแล้ว</option>
                                             {% for k in subject_all %}
                                                 {% if k.categories.id == i.subject_type.id %}
-                                                    <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }}</option>
+                                                    <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }} | {{ k.name_eng }}</option>
                                                 {% endif %}
                                             {% endfor %}
                                         </select>

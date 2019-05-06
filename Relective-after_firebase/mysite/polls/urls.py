@@ -32,6 +32,7 @@ urlpatterns = [
     path('teacher/mainpage/',views.mainpage_teacher,name='mainpage_teacher'),
     path('teacher/subject_detail/<int:subject_id>/',views.subject_detail_teacher,name='subject_detail_teacher'),
 path('teacher/subject_detail/<int:subject_id>/review_detail/<int:review_id>', views.review_detail_teacher, name="review_detail_teacher"),
+    path('adminpanel',views.adminredirect,name='redirectadmin')
 ]
 
 if settings.DEBUG:

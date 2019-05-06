@@ -51,7 +51,7 @@
                                             <option value="0" selected>เลือกวิชาที่เคยเรียนมาแล้ว</option>
                                             {% for k in subject_all %}
                                                 {% if k.categories.id == j.id %}
-                                            <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }}</option>
+                                            <option value="{{ k.id }}">{{ k.id }} | {{ k.name_th }} | {{ k.name_eng }}</option>
                                                 {% endif %}
                                             {% endfor %}
                                         </select>

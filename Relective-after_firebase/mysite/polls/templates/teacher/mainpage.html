@@ -9,11 +9,19 @@
 
     <link rel="shortcut icon" href="{% static 'tab-logo.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <script src="{% static 'action.js' %}"></script>
+
 </head>
-<body>
+<body onload="loading()">
 <div id="app">
     <div class="bg-image-black"></div>
     <div class="bg-image"></div>
+    <div id="modal" style="z-index: 10000000000000000">
+        <div style="height: 100%;display: flex;align-items: center;justify-content: center;text-align: center"
+             id="center_modal">
+            <img src="{% static 'loadingIcon.gif' %}" style="width: 80%;max-width: 300px " id="logoloafing">
+        </div>
+    </div>
     <div class="pos-f-t">
         <div class="collapse" id="navbarToggleExternalContent">
             <div class="bg-dark p-4" id="navbg">
@@ -106,10 +114,10 @@
                         aria-haspopup="true" aria-expanded="false">
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    {% if member_info.role == 'administrator'  %}
-                    <a href="{% url 'adminPanel' %}">
-                        <button class="dropdown-item" type="button">จัดการระบบ</button>
-                    </a>
+                    {% if member_info.role == 'administrator' %}
+                        <a href="{% url 'adminPanel' %}">
+                            <button class="dropdown-item" type="button">จัดการระบบ</button>
+                        </a>
                     {% endif %}
                     <a href="{% url 'index' %}">
                         <button class="dropdown-item" type="button">ลงชื่อออก</button>
