@@ -172,7 +172,7 @@ def set_infor_student(request):
 
 @login_required
 def update_infor_student(request):
-    list_major1 = [570701, 59072, 59073]
+    list_major1 = [570701, 570702, 570703]
     ans = []
     aaa = member()
     if (request.method == 'POST'):

@@ -52,8 +52,6 @@
                                                 {% endfor %}
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             {% endif %}
@@ -108,10 +106,11 @@
                         aria-haspopup="true" aria-expanded="false">
                 </button>
                 <div class="dropdown-menu dropdown-menu-right">
-                    {% if  %}
-                    <a href="{% url 'student_information' %}">
-                        <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
+                    {% if member_info.role == 'administrator'  %}
+                    <a href="{% url 'adminPanel' %}">
+                        <button class="dropdown-item" type="button">จัดการระบบ</button>
                     </a>
+                    {% endif %}
                     <a href="{% url 'student_information' %}">
                         <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
                     </a>

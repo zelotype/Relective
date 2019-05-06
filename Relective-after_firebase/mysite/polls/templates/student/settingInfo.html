@@ -16,26 +16,10 @@
     <div class="bg-image"></div>
     <div class="pos-f-t">
         <nav class="navbar navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarToggleExternalContent"
-                    aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a href="{% url 'mainpage_student' %}">
+
+            <a href="{% url 'mainpage_student' %}" style="margin: auto">
                 <div style="margin: auto"><img src="{% static 'logo.gif' %}" style="width: 100%;max-width: 200px"></div>
             </a>
-            <div class="btn-group">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <button class="dropdown-item" type="button">แก้ไขข้อมูลส่วนตัว</button>
-                    <div class="dropdown-divider"></div>
-                    <a href="{% url 'index' %}">
-                        <button class="dropdown-item" type="button">ลงชื่อออก</button>
-                    </a>
-                </div>
-            </div>
         </nav>
     </div>
     {#<div style="bottom: 0; background-color: red;width: 100%">#}
