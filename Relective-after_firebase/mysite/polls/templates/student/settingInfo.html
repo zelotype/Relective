@@ -38,7 +38,7 @@
             </div>
             <div class="col-sm-12" style="padding: 30px;padding-top: 15px">
                 <form method="post" action="{% url 'student_information' %}">
-                {% csrf_token %}
+                    {% csrf_token %}
                     <div class="container-fluid"
                          style="background-color: white;border-radius: 20px;color: black;margin-bottom: 20px;padding-top: 10px">
                         <div class="row" style="margin-bottom: 20px">
@@ -81,7 +81,8 @@
                                         <select class="custom-select custom-select-lg mb-3" name="{{ i.id }}"
                                                 style="max-height: 50px" disabled>
 
-                                            <option value="{{ i.subject_id.id }}" selected>{{ i.subject_id.name_th }}</option>
+                                            <option value="{{ i.subject_id.id }}"
+                                                    selected>{{ i.subject_id.name_th }}</option>
                                         </select>
                                     {% endif %}
                                     {% if i.status == False %}
@@ -95,8 +96,9 @@
                                                 {% endif %}
                                             {% endfor %}
                                         </select>
-                                        <hr>
+
                                     {% endif %}
+                                    <hr>
                                 </div>
                             {% endfor %}
                             <div class="col-sm-12" style="margin-bottom: 10px">
