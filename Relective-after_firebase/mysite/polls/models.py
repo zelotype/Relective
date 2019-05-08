@@ -6,8 +6,6 @@ class Course_Year(models.Model):
     new = 2559
     Type = ((old, 2557), (new, 2559))
     type = models.IntegerField(choices=Type, default=old)
-
-
 class Faculty(models.Model):
     name = models.CharField(max_length=255, null=False)
 

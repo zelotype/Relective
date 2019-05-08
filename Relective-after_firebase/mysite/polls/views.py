@@ -127,6 +127,11 @@ def adminPanel(request):
                 if ans.id == int(request.POST.get('value_')):
                     ans.cover = ''
                     ans.save()
+                    subject = 'แจ้งเตือนการไม่อนุมัติกระทู้'
+                    message = 'เนื่องจากกระทู้ที่ชื่อ ' + ans.title + ' มีเนื้อหาดังนี้ ' + ans.detail + ' ทางผู้ดูแลได้ตรวจเช็คกระทู้และเอกสารที่ท่านแนบมาแล้ว พบว่าเห็นสมควรไม่ให้ผ่านการอนุมัติ กรุณาตรวจสอบข้อมูลและเอกสารที่แนบมาอีกครั้ง ขอขอบคุณที่มาใช้บริการ Relective'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [ans.user_id.email]
+                    send_mail(subject, message, email_from, recipient_list)
         elif request.POST.get('form_') == '3':
             for j in ReportReview.objects.all():
                 if j.id == int(request.POST.get('value_')):

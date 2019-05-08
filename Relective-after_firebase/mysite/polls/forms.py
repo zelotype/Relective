@@ -27,7 +27,7 @@ class ReviewForm(forms.ModelForm):
         study_year = clean_data.get('study_year')
         chk = 0
 
-        if title == None or detail == '' or study_year == '' or teacher_name == '':
+        if title == None or detail == '' or study_year == '' or teacher_name == '' or teacher_name.isdigit():
             raise forms.ValidationError('กรุณากรอกข้อมูลให้ถูกต้อง')
         for i in bad_word:
             if i in title or i in detail or i in teacher_name:
