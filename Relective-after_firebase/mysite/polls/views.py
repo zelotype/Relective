@@ -14,12 +14,10 @@ from polls.forms import ReviewForm, CommentForm, ReportForm
 from polls.models import Courese_GenEd, GenEd_Subject, Faculty, Course_Major, Subject_require, Student_Year, Review, \
     Comment, RateReview, ReportReview
 from polls.models import User as member
-
 subject_type = Courese_GenEd.objects.all()
 all_subject = GenEd_Subject.objects.all()
 list_user = member.objects.all()
 faculty_list = Faculty.objects.all()
-
 user_obj = {
     'user_id': '',
     'name': '',
@@ -32,23 +30,14 @@ user_obj = {
     'role': '',
     'year_id': 0,
 }
-
-
 def navbar_subject():
     return subject_type
-
-
 def nav_subjet_all():
     return all_subject
-
-
 def get_user():
     return list_user
-
-
 def get_Faculty():
     return faculty_list
-
 
 def index(request):
     if (request.user is not None):
@@ -96,10 +85,8 @@ def index(request):
         return redirect('set_infor_student')
     return render(request, 'index.html')
 
-
 def my_logout(request):
     logout_then_login(request, "index")
-
 
 ###### admin ######
 @login_required
@@ -171,7 +158,6 @@ def adminPanel(request):
     }
     return render(request, 'administrator/adminPanel.html', context=context)
 
-
 # student
 # @login_required
 @login_required
@@ -190,7 +176,6 @@ def set_infor_student(request):
         'Userinfor': user_obj
     }
     return render(request, 'student/first_signin_form/setDefalt.html', context=context)
-
 
 @login_required
 def update_infor_student(request):
@@ -262,7 +247,6 @@ def update_infor_student(request):
 
     return render(request, 'student/first_signin_form/settingInformation.html', context=context)
 
-
 @login_required
 def studentInfo(request):
     ans =''
@@ -289,7 +273,6 @@ def studentInfo(request):
         'subject_all': GenEd_Subject.objects.all()
     }
     return render(request, 'student/settingInfo.html', context=context)
-
 
 @login_required
 def mainpage_student(request):
@@ -354,7 +337,6 @@ def mainpage_student(request):
     }
     return render(request, 'student/mainpage.html', context=context)
 
-
 @login_required
 def subject_detail_student(request, subject_id):
     ans = ''
@@ -411,7 +393,6 @@ def subject_detail_student(request, subject_id):
         'review': Review.objects.all()
     }
     return render(request, 'student/subject_detail.html', context=context)
-
 
 @login_required
 def review_detail_student(request, subject_id, review_id):
@@ -485,7 +466,6 @@ def review_detail_student(request, subject_id, review_id):
     }
     return render(request, 'student/review_page.html', context=context)
 
-
 # teacher
 @login_required
 def mainpage_teacher(request):
@@ -545,7 +525,6 @@ def mainpage_teacher(request):
     }
     return render(request, 'teacher/mainpage.html', context=context)
 
-
 @login_required
 def subject_detail_teacher(request, subject_id):
     for i in member.objects.all():
@@ -562,7 +541,6 @@ def subject_detail_teacher(request, subject_id):
         'review': Review.objects.all()
     }
     return render(request, 'teacher/subject_detail.html', context=context)
-
 
 @login_required
 def review_detail_teacher(request, subject_id, review_id):
@@ -587,7 +565,6 @@ def review_detail_teacher(request, subject_id, review_id):
         'RateReview': rate,
     }
     return render(request, 'teacher/review_page.html', context=context)
-
 
 # guest
 def mainpage_guest(request):
@@ -643,7 +620,6 @@ def mainpage_guest(request):
     }
     return render(request, 'guest/mainpage.html', context=context)
 
-
 def subject_detail_guest(request, subject_id):
     subject_type = navbar_subject()
     subject_name = nav_subjet_all()
@@ -657,7 +633,6 @@ def subject_detail_guest(request, subject_id):
         'review': Review.objects.all()
     }
     return render(request, 'guest/subject_detail.html', context=context)
-
 
 def review_detail_guest(request, subject_id, review_id):
     subject_type = navbar_subject()
@@ -676,7 +651,6 @@ def review_detail_guest(request, subject_id, review_id):
         'RateReview': rate,
     }
     return render(request, 'guest/review_page.html', context=context)
-
 
 def singInbyGuest(request):
     return redirect('mainpage_guest')

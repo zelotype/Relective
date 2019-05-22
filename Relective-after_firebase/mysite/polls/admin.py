@@ -4,13 +4,11 @@ from django.contrib.auth.models import Permission
 from polls.models import User, Faculty, Course_Year, Student_Year, Courese_GenEd, Course_Major, GenEd_Subject, Review, \
     Comment, Subject_require
 
-
 class managePageAdmin(admin.ModelAdmin):
     list_display = ["id", "name_th", "name_eng", "credit", ]
     list_filter = ["name_th"]
     search_fields = ["id", "name_th", "name_eng", "credit"]
     list_per_page = 15
-
 
 class manageReview(admin.ModelAdmin):
     list_display = ['title', 'detail']
