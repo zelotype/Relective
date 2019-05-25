@@ -129,70 +129,68 @@
                                      style="height: 45vh;overflow-y: scroll;border: 5px solid #083D77;">
                                     <div class="container-fluid" style="padding: 0;">
                                         <div class="row">
-                                            {% for q in review %}
-                                                {% for j in report_review %}
-                                                    {% if q.id == j.review.id %}
-                                                        <div class="col-sm-12">
-                                                            <div class="col-sm-12"
-                                                                 style="padding: 10px;text-align: center">
-                                                                <div class="card" id="review" style="width: 80%">
-                                                                    <div class="card-header"
-                                                                         style="font-weight: bolder;position: relative">
-                                                                        หัวข้อ : {{ q.title }}
-                                                                        {#                                                        <!-- Example single danger button -->#}
+                                            {% for j in report_review %}
+                                                <div class="col-sm-12">
+                                                    <div class="col-sm-12"
+                                                         style="padding: 10px;text-align: center">
+                                                        <div class="card" id="review" style="width: 80%">
+                                                            <div class="card-header"
+                                                                 style="font-weight: bolder;position: relative">
+                                                                หัวข้อ : {{ j.review.title }}
+                                                                {#                                                        <!-- Example single danger button -->#}
 
 
-                                                                    </div>
-                                                                    <div class="card-body">
-                                                                        <p class="card-text">
-                                                                            รายละเอียด : {{ q.detail }}
-                                                                        </p>
-                                                                        <hr>
-                                                                        <div style="width: 100%;border: 1px solid #3578E5">
-                                                                            เหตุผลในการรายงาน |
-                                                                            {{ j.detail_review }}
-                                                                        </div>
-                                                                        <hr>
-                                                                        <p class="card-text">
-                                                                            อาจารย์ : {{ q.teacher_name }}
-                                                                        </p>
-                                                                        <hr>
-                                                                        <p class="card-text">
-                                                                            ปีการศึกษา : {{ q.study_year }}
-                                                                        </p>
-                                                                        <hr>
-                                                                        <div style="width: 100%;text-align: center">
-                                                                            <form id="reportreview" method="post"
-                                                                                  action="{% url 'adminPanel' %}">
-                                                                                {% csrf_token %}
-                                                                                <input name="form_" v-bind:value="state"
-                                                                                       hidden>
-                                                                                <input name="value_"
-                                                                                       value="{{ j.id }}" hidden>
-                                                                                <button @click="passreportform"
-                                                                                        class="btn btn-success">
-                                                                                    กระทู้ผ่าน
-                                                                                </button>
-                                                                                |
-                                                                                <button @click="deletereview"
-                                                                                        class="btn btn-danger">ลบกระทู้
-                                                                                </button>
-                                                                            </form>
-                                                                        </div>
-
-
-                                                                    </div>
-                                                                    <div class="card-footer text-muted"
-                                                                         style="position: relative;">
-                                                                        {{ q.user_id.name }}
-                                                                    </div>
-
-                                                                </div>
                                                             </div>
+                                                            <div class="card-body">
+                                                                <p class="card-text">
+                                                                    รายละเอียด : {{ j.review.detail }}
+                                                                </p>
+                                                                <hr>
+                                                                <div style="width: 100%;border: 1px solid #3578E5">
+                                                                    เหตุผลในการรายงาน |
+                                                                    {{ j.detail_review }}
+                                                                </div>
+                                                                <hr>
+                                                                <p class="card-text">
+                                                                    อาจารย์ : {{ j.review.teacher_name }}
+                                                                </p>
+                                                                <hr>
+                                                                <p class="card-text">
+                                                                    ปีการศึกษา : {{ j.review.study_year }}
+                                                                </p>
+                                                                <hr>
+                                                                <div style="width: 100%;text-align: center">
+                                                                    <form id="reportreview" method="post"
+                                                                          action="{% url 'adminPanel' %}">
+                                                                        {% csrf_token %}
+                                                                        <input name="form_" v-bind:value="state"
+                                                                               hidden>
+                                                                        <input name="value_"
+                                                                               value="{{ j.id }}" hidden>
+                                                                        <button @click="passreportform"
+                                                                                class="btn btn-success">
+                                                                            กระทู้ผ่าน
+                                                                        </button>
+                                                                        |
+                                                                        <button @click="deletereview"
+                                                                                class="btn btn-danger">ลบกระทู้
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div class="card-footer text-muted"
+                                                                 style="position: relative;">
+                                                                {{ j.review.user_id.name }}
+                                                            </div>
+
                                                         </div>
-                                                    {% endif %}
-                                                {% endfor %}
+                                                    </div>
+                                                </div>
+
                                             {% endfor %}
+
                                         </div>
                                     </div>
                                 </div>

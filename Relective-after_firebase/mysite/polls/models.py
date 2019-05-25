@@ -6,7 +6,6 @@ class Course_Year(models.Model):
     new = 2559
     Type = ((old, 2557), (new, 2559))
     type = models.IntegerField(choices=Type, default=old)
-
 class Faculty(models.Model):
     name = models.CharField(max_length=255, null=False)
 
@@ -15,6 +14,7 @@ class Faculty(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Student_Year(models.Model):
     one = 1
@@ -45,6 +45,7 @@ class Course_Major(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class GenEd_Subject(models.Model):
     name_th = models.CharField(max_length=255, null=False)
     name_eng = models.CharField(max_length=255, null=False, default="")
@@ -52,6 +53,7 @@ class GenEd_Subject(models.Model):
     description = models.TextField()
     prerequisite = models.IntegerField(default=1)
     credit = models.IntegerField(default=1)
+
 
 class User(models.Model):
     name = models.CharField(max_length=255, null=False)
@@ -70,6 +72,7 @@ class User(models.Model):
     verify = models.BooleanField(default=False, null=False)
     img_url = models.CharField(max_length=20000, null=True)
 
+
 class Review(models.Model):
     title = models.CharField(max_length=10000, null=True)
     detail = models.TextField(null=True, blank=True)
@@ -81,6 +84,7 @@ class Review(models.Model):
     teacher_name = models.CharField(max_length=1000,null=False)
     study_year = models.IntegerField()
 
+
 class Comment(models.Model):
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -88,16 +92,19 @@ class Comment(models.Model):
     report = models.IntegerField(default=0)
     annonymous = models.BooleanField(default=False)
 
+
 class RateReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     point = models.IntegerField(default=0)
+
 
 class Subject_require(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     subject_type = models.ForeignKey(Courese_GenEd, on_delete=models.PROTECT)
     status = models.BooleanField(default=False, null=False)
     subject_id = models.ForeignKey(GenEd_Subject, on_delete=models.PROTECT, null=True)
+
 
 class ReportReview(models.Model):
     review = models.ForeignKey(Review,on_delete=models.CASCADE)

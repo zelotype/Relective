@@ -24,7 +24,6 @@ urlpatterns = [
 path('teacher/subject_detail/<int:subject_id>/review_detail/<int:review_id>', views.review_detail_teacher, name="review_detail_teacher"),
     path('adminpanel',views.adminredirect,name='redirectadmin')
 ]
-
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL,
                               document_root=settings.MEDIA_ROOT)
